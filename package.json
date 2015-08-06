@@ -1,7 +1,7 @@
 {
   "name": "SumoChicken",
   "description": "Multiplayer browser game inspired by Joust",
-  "url": "https://github.com/invincible-elevator/invincible-elevator",
+  "url": "https://github.com/invincible-elevator/sumo-chicken",
   "author": "Chris Lockwood, Devon Koch, Shelley Wang",
   "dependencies": {
     "express": "^4.13.3",
