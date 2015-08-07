@@ -9,6 +9,10 @@ var create = function(){
   
   game.physics.startSystem(Phaser.Physics.ARCADE);
 
+  background = game.add.tileSprite(-2000, -2000, 4000, 4000, "background");
+  background.scale.x = 2;
+  background.scale.y = 2;
+
   // Create the initial player
   player = new Player(game, 0, 0);
   game.add.existing(player);
@@ -27,6 +31,8 @@ var create = function(){
   
   platformLocations.forEach(function(platformCoords){
     var platform = platforms.create(platformCoords[0],platformCoords[1], platformCoords[2]);
+    platform.scale.x = 2;
+    platform.scale.y = 2;
     platform.anchor.setTo(.5, .5);
     platform.body.immovable = true;
   });
