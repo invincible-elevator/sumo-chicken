@@ -3,7 +3,7 @@ playerAccleration = 14;
 playerDecceleration = 9;
 
 var update = function(){
-  console.log('update working');
+  //console.log('update working');
 
   game.physics.arcade.collide(player, platforms);
 
