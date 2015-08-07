@@ -1,6 +1,7 @@
-var express   = require('express'),
-    http      = require('http'),
-    path      = require('path');
+var express     = require('express'),
+    http        = require('http'),
+    path        = require('path'),
+    playerUtils = require('./playerUtils.js');
 
 var app = express();
 var server = http.Server(app);
@@ -11,25 +12,30 @@ app.use(express.static(path.join(__dirname, '../client')));
 
 server.listen(port);
 
-
 io.on('connection', function(socket) {
   console.log('Connected: ', socket.id);
-
-  var startingLocation = {x: 0,
-                          y: 0};
+  playerUtils.newPlayer(socket.id);
 
   socket.on('death', function() {
     console.log('Death: ', socket.id);
-    socket.emit('newLocation', startingLocation);
+    socket.emit('newLocation', playerUtils.getStartLoc());
+    playerUtils.newPlayer(socket.id);
+    console.log(playerUtils.getPlayers());
   })
 
-  socket.on('movement', function(data) {
-
+  socket.on('sync', function(data) {
+    playerUtils.updatePlayer(socket.id, data);
+    console.log(playerUtils.getPlayers());
+    
   })
 
   socket.on('disconnect', function() {
     console.log('Disconnected: ', socket.id);
+    playerUtils.dcPlayer(socket.id);
+    console.log(playerUtils.getPlayers());
   });
 });
+
+
 
 
