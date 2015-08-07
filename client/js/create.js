@@ -10,7 +10,9 @@ var create = function(){
   game.physics.startSystem(Phaser.Physics.ARCADE);
 
   // Create player
-  player = game.add.sprite(0, 0, 'chicken');
+  // player = game.add.sprite(0, 0, 'chicken');
+  player = game.add.sprite(startingLocation.x, startingLocation.y, 'chicken');
+
   game.physics.arcade.enable(player);
   
   player.body.gravity.y = 980;
