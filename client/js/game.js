@@ -1,4 +1,4 @@
-var socket = io.connect('http://localhost:8080');
+socket = io.connect('http://localhost:8080');
 
 socket.on('startingLocation', function(data){
   startingLocation = data;
