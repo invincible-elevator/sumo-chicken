@@ -36,7 +36,10 @@ var update = function(){
   player.animations.currentAnim.delay = Math.min(1 / (Math.abs(player.body.velocity.x) * .00009), 100);
 
   if(jumpButton.isDown && player.body.touching.down) {
-    player.body.velocity.y = -850
+    player.body.velocity.y = -850;
   }
+
+  // Increase stored dashMeter
+  player.chargeDash();
 
 }; 
