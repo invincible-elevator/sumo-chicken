@@ -36,7 +36,7 @@ var create = function(){
   dashButton = game.input.keyboard.addKey(Phaser.Keyboard.C);
 
   dashButton.onDown.add(function() {
-    player.body.velocity.x = -Math.sign(player.scale.x) * 1000;
+    player.body.velocity.x = -Math.sign(player.scale.x) * player.dash();
     player.animations.play('flying');
   }, this);
 
