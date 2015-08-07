@@ -14,20 +14,23 @@ var create = function(){
   
   game.physics.startSystem(Phaser.Physics.ARCADE);
 
-  var player = game.add.sprite(0, 0, 'cat');
-  var platform = game.add.sprite(400, 600, 'platform');
+  player = game.add.sprite(0, -1000, 'chicken');
   
   game.physics.arcade.enable(player);
-  game.physics.arcade.enable(platform);
+  // game.physics.arcade.enable(platform);
 
   // create platforms
   platforms = game.add.group();
   platforms.enableBody = true;
   
   platformLocations.forEach(function(platformCoords){
-    platforms.create(platformCoords[0],platformCoords[1], platformCoords[2]);
+    var platform = platforms.create(platformCoords[0],platformCoords[1], platformCoords[2]);
+    platform.body.immovable = true;
   });
 
   player.body.gravity.y = 980;
+
+  jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+  cursors = game.input.keyboard.createCursorKeys();
 
 };
