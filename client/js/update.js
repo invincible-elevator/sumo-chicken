@@ -2,7 +2,17 @@ playerMaxSpeed = 500;
 playerAccleration = 14;
 playerDecceleration = 9;
 
+syncTimer = 0;
+
 var update = function(){
+  var syncRate = 10;
+
+  if (syncTimer % syncRate === 0) {
+    socket.emit('sync', {'PX':player.x, 'PY':player.y,
+                         'VX':player.body.velocity.x, 'VY': player.body.velocity.y});
+  }
+  syncTimer ++;
+
   game.physics.arcade.collide(player, platforms);
 
   if(cursors.left.isDown && player.body.velocity.x > -playerMaxSpeed) {
