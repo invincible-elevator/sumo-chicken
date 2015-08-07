@@ -18,8 +18,6 @@ io.on('connection', function(socket) {
   var startingLocation = {x: 0,
                           y: 0};
 
-  // socket.emit('newLocation', startingLocation);
-
   socket.on('death', function() {
     console.log('Death: ', socket.id);
     socket.emit('newLocation', startingLocation);

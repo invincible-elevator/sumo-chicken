@@ -1,5 +1,3 @@
-console.log('loadingplayer.js')
-
 Player = function(game, x,y) {
 
   Phaser.Sprite.call(this, game, x, y, 'chicken');

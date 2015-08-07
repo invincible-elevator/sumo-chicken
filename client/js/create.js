@@ -9,43 +9,17 @@ var create = function(){
   
   game.physics.startSystem(Phaser.Physics.ARCADE);
 
-
+  // Create the initial player
   player = new Player(game, 0, 0);
   game.add.existing(player);
 
 
+  // Respawns the player 
   socket.on('newLocation', function(data){
-    console.log('respawn')
-    player = new Player(game, 0, 0);
+    player = new Player(game, data.x, data.y);
     game.add.existing(player);
   });
 
-  // Create player
-  // player = game.add.sprite(0, 0, 'chicken');
-  // player = game.add.sprite(startingLocation.x, startingLocation.y, 'chicken');
-
-  // game.physics.arcade.enable(player);
-  
-  // player.body.gravity.y = 980;
-
-  // player.anchor.setTo(.5, .5);
-  // player.animations.add('walking', [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17], 10, true);
-  // player.animations.add('flying', [18, 19, 20, 21, 22, 23], 10, true);
-  // player.animations.add('pecking', [0, 1, 2, 3, 4, 5])
-  
-  // player.scale.setTo(2, 2);
-  // player.body.setSize(player.body.width - 16, 
-  //                     player.body.height - 10, 
-  //                     0, 4);
-
-  // player.checkWorldBounds = true;
-  // player.outOfBoundsKill = true;
-
-  // player.events.onKilled.add(function() {
-  //   console.log('Woe is me!!!');
-
-  //   socket.emit('death');
-  // })
 
   // Create platforms
   platforms = game.add.group();
