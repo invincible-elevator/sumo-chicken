@@ -1,4 +1,6 @@
 var create = function(){
+  //  Phaser will automatically pause if the browser tab the game is in loses focus. You can disable that here:
+  this.stage.disableVisibilityChange = true;
 
   var platformLocations = [[400,0, 'platform'], [0,-300, 'platform'], [0,300, 'platform'], [-400,0, 'platform']];
 
@@ -14,14 +16,34 @@ var create = function(){
   background.scale.y = 2;
 
   // Create the initial player
-  player = new Player(game, 0, 0);
+  player = new Player(game, 0, 0, true);
   game.add.existing(player);
 
+  otherChickens = {};
 
   // Respawns the player 
   socket.on('newLocation', function(data){
-    player = new Player(game, data.x, data.y);
+    player = new Player(game, data.x, data.y, true);
     game.add.existing(player);
+  });
+
+  socket.on('sync', function(data){
+    var syncKeys = Object.keys(data);
+    syncKeys.forEach(function(key) {
+      if (otherChickens[key]) {
+        otherChickens[key].x = data[key].positionX;
+        otherChickens[key].y = data[key].positionY;
+      } else {
+        newChicken = new Player(game, data[key].positionX, data[key].positionY, false);
+        game.add.existing(newChicken);
+        otherChickens[key] = newChicken;
+      }
+    });
+    for (key in otherChickens) {
+      if (syncKeys.indexOf(key) === -1) {
+        delete otherChickens[key];
+      }
+    }
   });
 
 

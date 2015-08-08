@@ -20,19 +20,19 @@ io.on('connection', function(socket) {
     console.log('Death: ', socket.id);
     socket.emit('newLocation', playerUtils.getStartLoc());
     playerUtils.newPlayer(socket.id);
-    console.log(playerUtils.getPlayers());
-  })
+    // console.log(playerUtils.getPlayers());
+  });
 
   socket.on('sync', function(data) {
     playerUtils.updatePlayer(socket.id, data);
-    console.log(playerUtils.getPlayers());
-    
-  })
+    socket.emit('sync', playerUtils.getPlayers(socket.id));
+    // console.log(playerUtils.getPlayers());
+  });
 
   socket.on('disconnect', function() {
     console.log('Disconnected: ', socket.id);
     playerUtils.dcPlayer(socket.id);
-    console.log(playerUtils.getPlayers());
+    // console.log(playerUtils.getPlayers());
   });
 });
 

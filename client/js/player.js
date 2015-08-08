@@ -1,4 +1,4 @@
-Player = function(game, x,y) {
+Player = function(game, x,y, self) {
 
   Phaser.Sprite.call(this, game, x, y, 'chicken');
 
@@ -20,11 +20,13 @@ Player = function(game, x,y) {
   this.outOfBoundsKill = true;
 
 
-  this.events.onKilled.add(function() {
-    console.log('Woe is me!!!');
+  if (self) {
+    this.events.onKilled.add(function() {
+      console.log('Woe is me!!!');
 
-    socket.emit('death');
-  })
+      socket.emit('death');
+    })
+  }
 
   this.dashMeter = 0;
   this.dash = function() {
