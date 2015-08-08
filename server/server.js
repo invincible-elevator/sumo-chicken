@@ -25,7 +25,7 @@ io.on('connection', function(socket) {
 
   socket.on('sync', function(data) {
     playerUtils.updatePlayer(socket.id, data);
-    socket.emit('sync', playerUtils.getPlayers(socket.id));
+    socket.emit('sync', playerUtils.getPlayers());
     // console.log(playerUtils.getPlayers());
   });
 

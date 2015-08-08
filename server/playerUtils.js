@@ -4,15 +4,7 @@ var startingLocation = {x: 0,
                         y: 0};
 
 var getPlayers = function(socketID) {
-  if (socketID) {
-    var returnInfo = {};
-    for (key in playerInformation) {
-      if (key !== socketID) returnInfo[key] = playerInformation[key];
-    }
-    return returnInfo;
-  } else {
-    return playerInformation;
-  }
+  return playerInformation;
 };
 
 var getStartLoc = function() {

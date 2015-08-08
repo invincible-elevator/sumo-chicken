@@ -30,16 +30,18 @@ var create = function(){
   socket.on('sync', function(data){
     var syncKeys = Object.keys(data);
     syncKeys.forEach(function(key) {
-      if (otherChickens[key]) {
-        // console.log(otherChickens[key].x,otherChickens[key].y)
-        otherChickens[key].x = data[key].positionX;
-        otherChickens[key].y = data[key].positionY;
-        otherChickens[key].body.velocity.x = data[key].velocityX;
-        otherChickens[key].body.velocity.y = data[key].velocityY;
-      } else {
-        newChicken = new Player(game, data[key].positionX, data[key].positionY, false);
-        game.add.existing(newChicken);
-        otherChickens[key] = newChicken;
+      if (key !==socket.id) {
+        if (otherChickens[key]) {
+          // console.log(otherChickens[key].x,otherChickens[key].y)
+          otherChickens[key].x = data[key].positionX;
+          otherChickens[key].y = data[key].positionY;
+          otherChickens[key].body.velocity.x = data[key].velocityX;
+          otherChickens[key].body.velocity.y = data[key].velocityY;
+        } else {
+          newChicken = new Player(game, data[key].positionX, data[key].positionY, false);
+          game.add.existing(newChicken);
+          otherChickens[key] = newChicken;
+        }
       }
     });
     for (key in otherChickens) {
