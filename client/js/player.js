@@ -17,10 +17,10 @@ Player = function(game, x,y, self) {
                       0, 4);
 
   this.checkWorldBounds = true;
-  this.outOfBoundsKill = true;
 
 
   if (self) {
+    this.outOfBoundsKill = true;
     this.events.onKilled.add(function() {
       console.log('Woe is me!!!');
 
