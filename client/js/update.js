@@ -5,15 +5,21 @@ playerDecceleration = 9;
 syncTimer = 0;
 
 var update = function(){
-  var syncRate = 10;
+  var syncRate = 3; // should be 3
 
   if (syncTimer % syncRate === 0) {
     socket.emit('sync', {'PX':player.x, 'PY':player.y,
                          'VX':player.body.velocity.x, 'VY': player.body.velocity.y});
+    // console.log(otherChickens)
   }
   syncTimer ++;
 
   game.physics.arcade.collide(player, platforms);
+
+  for (key in otherChickens) {
+    game.physics.arcade.collide(otherChickens[key], platforms);
+    game.physics.arcade.collide(otherChickens[key], player);
+  }
 
   if(cursors.left.isDown && player.body.velocity.x > -playerMaxSpeed) {
     player.body.velocity.x -= playerAccleration;

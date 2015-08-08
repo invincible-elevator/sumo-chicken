@@ -3,7 +3,7 @@ var playerInformation= {};
 var startingLocation = {x: 0,
                         y: 0};
 
-var getPlayers = function() {
+var getPlayers = function(socketID) {
   return playerInformation;
 };
 
