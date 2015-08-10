@@ -11,13 +11,19 @@ var create = function(){
   
   game.physics.startSystem(Phaser.Physics.ARCADE);
 
-  background = game.add.tileSprite(-2000, -2000, 4000, 4000, "background");
+  background = game.add.tileSprite(-2000, -400, 4000, 400, "background");
   background.scale.x = 2;
   background.scale.y = 2;
+
+  lava = game.add.tileSprite(-2000, 365,4000,180,"lava");
+  lava.scale.x = 1;
+
+
 
   // Create the initial player
   player = new Player(game, 0, 0, true);
   game.add.existing(player);
+  lava.bringToTop(); // player falls behind lava
 
   otherChickens = {};
 
@@ -25,6 +31,8 @@ var create = function(){
   socket.on('newLocation', function(data){
     player = new Player(game, data.x, data.y, true);
     game.add.existing(player);
+    lava.bringToTop();
+
   });
 
   socket.on('sync', function(data){
