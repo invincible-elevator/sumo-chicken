@@ -51,8 +51,14 @@ var update = function(){
   // Takes almost no processing, but looks worse
   player.animations.currentAnim.delay = Math.min(1 / (Math.abs(player.body.velocity.x) * 0.00009), 100);
 
+  // Jump if on ground and move upward until jump runs out or lets go of space
+  var jumpSpeed = -850;
   if(jumpButton.isDown && player.body.touching.down) {
-    player.body.velocity.y = -850;
+    player.body.velocity.y = jumpSpeed;
+  } else if (!jumpButton.isDown && !player.body.touching.down) {
+    if (player.body.velocity.y < 0 && player.body.velocity.y > jumpSpeed + 100) {
+      player.body.velocity.y = 0;
+    }
   }
 
   // Increase stored dashMeter
