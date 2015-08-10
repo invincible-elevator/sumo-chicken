@@ -2,7 +2,7 @@ var create = function(){
   //  Phaser will automatically pause if the browser tab the game is in loses focus. You can disable that here:
   this.stage.disableVisibilityChange = true;
 
-  var platformLocations = [[400,0, 'platform'], [0,-300, 'platform'], [0,300, 'platform'], [-400,0, 'platform']];
+  var platformLocations = [[400, 0, 'platform'], [0,-300, 'platform'], [0,300, 'platform'], [-400,0, 'platform']];
 
   game.world.setBounds(-2000, -2000, 4000, 4000 );
   
@@ -44,7 +44,7 @@ var create = function(){
         }
       }
     });
-    for (key in otherChickens) {
+    for (var key in otherChickens) {
       if (syncKeys.indexOf(key) === -1) {
         delete otherChickens[key];
       }
@@ -60,7 +60,7 @@ var create = function(){
     var platform = platforms.create(platformCoords[0],platformCoords[1], platformCoords[2]);
     platform.scale.x = 2;
     platform.scale.y = 2;
-    platform.anchor.setTo(.5, .5);
+    platform.anchor.setTo(0.5, 0.5);
     platform.body.immovable = true;
   });
 

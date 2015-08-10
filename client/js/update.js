@@ -16,7 +16,7 @@ var update = function(){
 
   game.physics.arcade.collide(player, platforms);
 
-  for (key in otherChickens) {
+  for (var key in otherChickens) {
     game.physics.arcade.collide(otherChickens[key], platforms);
     game.physics.arcade.collide(otherChickens[key], player);
   }
@@ -49,7 +49,7 @@ var update = function(){
   // player.animations.currentAnim.speed = Math.abs(player.body.velocity.x / 8) + 5;
 
   // Takes almost no processing, but looks worse
-  player.animations.currentAnim.delay = Math.min(1 / (Math.abs(player.body.velocity.x) * .00009), 100);
+  player.animations.currentAnim.delay = Math.min(1 / (Math.abs(player.body.velocity.x) * 0.00009), 100);
 
   if(jumpButton.isDown && player.body.touching.down) {
     player.body.velocity.y = -850;

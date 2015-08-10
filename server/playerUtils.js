@@ -9,7 +9,7 @@ var getPlayers = function(socketID) {
 
 var getStartLoc = function() {
   return startingLocation;
-}
+};
 
 var newPlayer = function(socketID) {
   playerInformation[socketID] = {
