@@ -5,6 +5,6 @@ var preload = function(){
   game.load.image('platform', 'assets/platform.png');
   game.load.image('background', 'assets/forest.png');
 
-  game.stage.smoothed = false
+  game.stage.smoothed = false;
 
 };
