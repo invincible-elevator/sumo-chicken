@@ -52,6 +52,11 @@ var update = function(){
     addAnimations(otherChickens[key]);
   }
 
+  game.physics.arcade.overlap(player, platforms, function(playerSprite, platform) {
+    playerSprite.y = platform.top - (playerSprite.height/2) - 5;
+  });
+
+
   if(cursors.left.isDown && player.body.velocity.x > -playerMaxSpeed) {
     player.body.velocity.x -= playerAccleration;
     player.scale.x = 2;
