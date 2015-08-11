@@ -1,6 +1,6 @@
 Player = function(game, x, y, self) {
 
-  this.dashing; // dashing property for other player chickens
+  this.dashing = false; // dashing property for other player chickens
 
   Phaser.Sprite.call(this, game, x, y, 'chicken');
 

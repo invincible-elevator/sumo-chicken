@@ -90,7 +90,7 @@ var addAnimations = function(chicken) {
     chicken.animations.stop();
     chicken.frame = 24; 
   } else if (chicken.body.velocity.x !== 0) {
-    chicken.dashing === true ? chicken.animations.play('flying') : chicken.animations.play('walking');
+    chicken.animations.play(chicken.dashing ? 'flying' : 'walking');
   } else {
     chicken.frame = 0;
   }
