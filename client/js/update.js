@@ -5,20 +5,38 @@ playerDecceleration = 9;
 syncTimer = 0;
 
 var update = function(){
-  var syncRate = 3; // should be 3
+  var syncRate = 2; // should be 3
 
   if (syncTimer % syncRate === 0) {
-    socket.emit('sync', {'PX': player.x, 'PY': player.y,
-                         'VX': player.body.velocity.x, 'VY': player.body.velocity.y,
-                         'dashBool': dashButton.isDown});
+    sendSync();
   }
   syncTimer ++;
 
   game.physics.arcade.collide(player, platforms);
 
+  var collideChickens = function(otherChicken, thisChicken) {
+    
+    var right;
+    var left;
+    if (otherChicken.x > thisChicken.x) {
+      right = otherChicken;
+      left = thisChicken;
+    } else {
+      right = thisChicken;
+      left = otherChicken;
+    }
+
+    var diff = otherChicken.body.velocity.x + thisChicken.body.velocity.x;
+    if (diff > 0) {
+      left.body.velocity.x = 0;
+    } else {
+      right.body.velocity.x = 0;
+    }
+  }
+
   for (var key in otherChickens) {
     game.physics.arcade.collide(otherChickens[key], platforms);
-    game.physics.arcade.collide(otherChickens[key], player);
+    game.physics.arcade.collide(otherChickens[key], player, collideChickens);
     addAnimations(otherChickens[key]);
   }
 
@@ -78,7 +96,7 @@ var update = function(){
   // Increase stored dashMeter
   player.chargeDash();
 
-}; 
+};
 
 
 var addAnimations = function(chicken) {
@@ -95,3 +113,9 @@ var addAnimations = function(chicken) {
     chicken.frame = 0;
   }
 };
+
+var sendSync = function() {
+  socket.emit('sync', {'PX': player.x, 'PY': player.y,
+                       'VX': player.body.velocity.x, 'VY': player.body.velocity.y,
+                       'dashBool': dashButton.isDown});
+}
