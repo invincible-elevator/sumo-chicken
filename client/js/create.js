@@ -45,6 +45,7 @@ var create = function(){
           otherChickens[key].y = data[key].positionY;
           otherChickens[key].body.velocity.x = data[key].velocityX;
           otherChickens[key].body.velocity.y = data[key].velocityY;
+          otherChickens[key].dashing = data[key].dashingBool;
         } else {
           newChicken = new Player(game, data[key].positionX, data[key].positionY, false);
           game.add.existing(newChicken);
@@ -77,11 +78,17 @@ var create = function(){
   dashButton = game.input.keyboard.addKey(Phaser.Keyboard.C);
 
   dashButton.onDown.add(function() {
+    player.dashing = true;
+    player.animations.play('flying');
     var mathSign = player.scale.x > 0 ? 1 : -1;
     player.body.velocity.x += -mathSign * player.dash();
-    player.animations.play('flying');
   }, this);
+
+  dashButton.onUp.add(function() {
+    player.dashing = false;
+  });
 
   cursors = game.input.keyboard.createCursorKeys();
 
 };
+

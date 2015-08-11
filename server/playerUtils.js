@@ -16,7 +16,8 @@ var newPlayer = function(socketID) {
     velocityX: 0,
     velocityY: 0,
     positionX: startingLocation.x,
-    positionY: startingLocation.y
+    positionY: startingLocation.y,
+    dashingBool: false
   };
 };
 
@@ -25,6 +26,7 @@ var updatePlayer = function(socketID, data) {
   playerInformation[socketID].positionY = data.PY;
   playerInformation[socketID].velocityX = data.VX;
   playerInformation[socketID].velocityY = data.VY;
+  playerInformation[socketID].dashingBool = data.dashBool;
 };
 
 var dcPlayer = function(socketID) {
