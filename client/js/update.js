@@ -8,9 +8,9 @@ var update = function(){
   var syncRate = 3; // should be 3
 
   if (syncTimer % syncRate === 0) {
-    socket.emit('sync', {'PX':player.x, 'PY':player.y,
-                         'VX':player.body.velocity.x, 'VY': player.body.velocity.y});
-    // console.log(otherChickens)
+    socket.emit('sync', {'PX': player.x, 'PY': player.y,
+                         'VX': player.body.velocity.x, 'VY': player.body.velocity.y,
+                         'dashBool': dashButton.isDown});
   }
   syncTimer ++;
 
@@ -19,6 +19,7 @@ var update = function(){
   for (var key in otherChickens) {
     game.physics.arcade.collide(otherChickens[key], platforms);
     game.physics.arcade.collide(otherChickens[key], player);
+    addAnimations(otherChickens[key]);
   }
 
   if(cursors.left.isDown && player.body.velocity.x > -playerMaxSpeed) {
@@ -45,7 +46,8 @@ var update = function(){
 
   if (player.body.touching.down) {
     if (player.body.velocity.x !== 0) {
-      player.animations.play('walking');
+      if (!dashButton.isDown) 
+        player.animations.play('walking');
     } else {
       player.frame = 0;
     }
@@ -77,3 +79,19 @@ var update = function(){
   player.chargeDash();
 
 }; 
+
+
+var addAnimations = function(chicken) {
+  var mathSign = chicken.body.velocity.x === 0 ? 0 : chicken.body.velocity.x > 0 ? 1 : -1;
+  if (mathSign !== 0) {
+    chicken.scale.x = mathSign > 0 ? -2 : 2;
+  } 
+  if (chicken.body.velocity.y !== 0) {
+    chicken.animations.stop();
+    chicken.frame = 24; 
+  } else if (chicken.body.velocity.x !== 0) {
+    chicken.dashing === true ? chicken.animations.play('flying') : chicken.animations.play('walking');
+  } else {
+    chicken.frame = 0;
+  }
+};

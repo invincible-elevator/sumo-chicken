@@ -1,4 +1,6 @@
-Player = function(game, x,y, self) {
+Player = function(game, x, y, self) {
+
+  this.dashing; // dashing property for other player chickens
 
   Phaser.Sprite.call(this, game, x, y, 'chicken');
 
@@ -13,8 +15,8 @@ Player = function(game, x,y, self) {
   
   this.scale.setTo(2, 2);
   this.body.setSize(this.body.width - 16, 
-                      this.body.height - 10,
-                      0, 4);
+                    this.body.height - 10,
+                    0, 4);
 
   this.checkWorldBounds = true;
 
@@ -23,7 +25,6 @@ Player = function(game, x,y, self) {
     this.outOfBoundsKill = true;
     this.events.onKilled.add(function() {
       console.log('Woe is me!!!');
-
       socket.emit('death');
     });
   }
