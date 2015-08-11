@@ -80,15 +80,10 @@ var create = function() {
   dashButton = game.input.keyboard.addKey(Phaser.Keyboard.C);
 
   dashButton.onDown.add(function() {
-    player.dashing = true;
     player.animations.play('flying');
     var mathSign = player.scale.x > 0 ? 1 : -1;
     player.body.velocity.x += -mathSign * player.dash();
   }, this);
-
-  dashButton.onUp.add(function() {
-    player.dashing = false;
-  });
 
   cursors = game.input.keyboard.createCursorKeys();
 

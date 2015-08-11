@@ -8,9 +8,9 @@ var update = function(){
   var syncRate = 3; // should be 3
 
   if (syncTimer % syncRate === 0) {
-    socket.emit('sync', {'PX':player.x, 'PY':player.y,
-                         'VX':player.body.velocity.x, 'VY': player.body.velocity.y,
-                         'dashBool':player.dashing});
+    socket.emit('sync', {'PX': player.x, 'PY': player.y,
+                         'VX': player.body.velocity.x, 'VY': player.body.velocity.y,
+                         'dashBool': dashButton.isDown});
   }
   syncTimer ++;
 
@@ -82,22 +82,15 @@ var update = function(){
 
 
 var addAnimations = function(chicken) {
-  var mathSign = chicken.body.velocity.x > 0 ? 1 : -1;
-  if (chicken.body.velocity.x === 0) mathSign = 0;
-  if (mathSign === 1) {
-    chicken.scale.x = -2;
-  } else if (mathSign === -1) {
-    chicken.scale.x = 2;
-  }
+  var mathSign = chicken.body.velocity.x === 0 ? 0 : chicken.body.velocity.x > 0 ? 1 : -1;
+  if (mathSign !== 0) {
+    chicken.scale.x = mathSign > 0 ? -2 : 2;
+  } 
   if (chicken.body.velocity.y !== 0) {
     chicken.animations.stop();
     chicken.frame = 24; 
   } else if (chicken.body.velocity.x !== 0) {
-    if (chicken.dashing === true) {
-      chicken.animations.play('flying');
-    } else {
-      chicken.animations.play('walking');
-    }
+    chicken.dashing === true ? chicken.animations.play('flying') : chicken.animations.play('walking');
   } else {
     chicken.frame = 0;
   }
