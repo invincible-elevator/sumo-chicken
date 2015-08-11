@@ -9,6 +9,7 @@ var create = function() {
                            [-400, 0, 'platform']];
 
   game.world.setBounds(-2000, -2000, 4000, 4000 );
+  game.time.desiredFps = 45;
   
   game.camera.x = -game.camera.width / 2;
   game.camera.y = -game.camera.height / 2;
