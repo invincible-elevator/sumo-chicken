@@ -1,7 +1,7 @@
 {
   "name": "SumoChicken",
+  "version": "0.0.1",
   "description": "Multiplayer browser game inspired by Joust",
-  "url": "https://github.com/invincible-elevator/sumo-chicken",
   "author": "Chris Lockwood, Devon Koch, Shelley Wang",
   "dependencies": {
     "bower": "1.4.x",
@@ -20,5 +20,13 @@
   "scripts": {
     "start": "node server/server.js",
     "postinstall": "bower install"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/invincible-elevator/sumo-chicken"
+  },
+  "bugs": {
+    "url": "https://github.com/invincible-elevator/sumo-chicken/issues"
+  },
+  "license": "MIT"
 }
