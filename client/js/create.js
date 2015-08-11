@@ -1,8 +1,12 @@
-var create = function(){
+var create = function() {
+
   //  Phaser will automatically pause if the browser tab the game is in loses focus. You can disable that here:
   this.stage.disableVisibilityChange = true;
 
-  var platformLocations = [[400, 0, 'platform'], [0,-300, 'platform'], [0,300, 'platform'], [-400,0, 'platform']];
+  var platformLocations = [[400, 0, 'platform'], 
+                           [0, -300, 'platform'], 
+                           [0, 300, 'platform'], 
+                           [-400, 0, 'platform']];
 
   game.world.setBounds(-2000, -2000, 4000, 4000 );
   
@@ -19,7 +23,6 @@ var create = function(){
   lava.scale.x = 1;
 
 
-
   // Create the initial player
   player = new Player(game, 0, 0, true);
   game.add.existing(player);
@@ -32,15 +35,13 @@ var create = function(){
     player = new Player(game, data.x, data.y, true);
     game.add.existing(player);
     lava.bringToTop();
-
   });
 
   socket.on('sync', function(data){
     var syncKeys = Object.keys(data);
     syncKeys.forEach(function(key) {
-      if (key !==socket.id) {
+      if (key !== socket.id) {
         if (otherChickens[key]) {
-          // console.log(otherChickens[key].x,otherChickens[key].y)
           otherChickens[key].x = data[key].positionX;
           otherChickens[key].y = data[key].positionY;
           otherChickens[key].body.velocity.x = data[key].velocityX;
@@ -50,6 +51,7 @@ var create = function(){
           newChicken = new Player(game, data[key].positionX, data[key].positionY, false);
           game.add.existing(newChicken);
           otherChickens[key] = newChicken;
+          lava.bringToTop();
         }
       }
     });
@@ -66,7 +68,7 @@ var create = function(){
   platforms.enableBody = true;
   
   platformLocations.forEach(function(platformCoords){
-    var platform = platforms.create(platformCoords[0],platformCoords[1], platformCoords[2]);
+    var platform = platforms.create(platformCoords[0], platformCoords[1], platformCoords[2]);
     platform.scale.x = 2;
     platform.scale.y = 2;
     platform.anchor.setTo(0.5, 0.5);

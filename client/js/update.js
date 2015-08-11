@@ -11,7 +11,6 @@ var update = function(){
     socket.emit('sync', {'PX':player.x, 'PY':player.y,
                          'VX':player.body.velocity.x, 'VY': player.body.velocity.y,
                          'dashBool':player.dashing});
-    // console.log(otherChickens)
   }
   syncTimer ++;
 
