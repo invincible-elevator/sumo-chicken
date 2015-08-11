@@ -1,6 +1,6 @@
 {
   "name": "SumoChicken",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "Multiplayer browser game inspired by Joust",
   "author": "Chris Lockwood, Devon Koch, Shelley Wang",
   "dependencies": {
