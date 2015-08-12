@@ -14,7 +14,6 @@ var update = function(){
   }
   syncTimer++;
 
-  game.physics.arcade.collide(player, platforms);
 
   // By waiting for the next sync before stopping, I believe this improves hit detection online
   if (stoppingTime + syncRate === syncTimer) {
@@ -44,13 +43,23 @@ var update = function(){
       stopping = right;
     }
     stoppingTime = syncTimer;
-  }
+  };
+
+  game.physics.arcade.collide(player, platforms);
+
+  // Ensure that players cannot go through the platforms if other players jump on them
+  game.physics.arcade.overlap(player, platforms, function(playerSprite, platform) {
+    var abovePlatform = platform.top - (playerSprite.height/2) - 5; // 5 is to offset player.js line 18
+    playerSprite.y = abovePlatform;
+  });
 
   for (var key in otherChickens) {
-    game.physics.arcade.collide(otherChickens[key], platforms);
     game.physics.arcade.collide(otherChickens[key], player, collideChickens);
+    game.physics.arcade.collide(otherChickens[key], platforms);
     addAnimations(otherChickens[key]);
   }
+
+
 
   if(cursors.left.isDown && player.body.velocity.x > -playerMaxSpeed) {
     player.body.velocity.x -= playerAccleration;
@@ -130,4 +139,4 @@ var sendSync = function() {
   socket.emit('sync', {'PX': player.x, 'PY': player.y,
                        'VX': player.body.velocity.x, 'VY': player.body.velocity.y,
                        'dashBool': dashButton.isDown});
-}
+};
