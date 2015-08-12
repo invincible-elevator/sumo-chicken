@@ -10,7 +10,7 @@ var update = function(){
   if (syncTimer % syncRate === 0) {
     sendSync();
   }
-  syncTimer ++;
+  syncTimer++;
 
   game.physics.arcade.collide(player, platforms);
 
@@ -29,8 +29,10 @@ var update = function(){
     var diff = otherChicken.body.velocity.x + thisChicken.body.velocity.x;
     if (diff > 0) {
       left.body.velocity.x = 0;
+      right.body.velocity.x = right.body.velocity.x * 1.5;
     } else {
       right.body.velocity.x = 0;
+      left.body.velocity.x = left.body.velocity.x * 1.5;
     }
   }
 
