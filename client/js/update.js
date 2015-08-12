@@ -1,6 +1,6 @@
 playerMaxSpeed = 500;
-playerAccleration = 14;
-playerDecceleration = 9;
+playerAccleration = 20;
+playerDecceleration = 10;
 
 syncTimer = 0;
 var stopping = null;
@@ -102,7 +102,7 @@ var update = function(){
   }
 
   // Jump if on ground and move upward until jump runs out or lets go of space
-  var jumpSpeed = -850;
+  var jumpSpeed = -900;
   if(jumpButton.isDown && player.body.touching.down) {
     player.body.velocity.y = jumpSpeed;
     player.animations.stop();
