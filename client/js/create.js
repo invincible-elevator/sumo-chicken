@@ -19,7 +19,13 @@ var create = function(){
   
   game.physics.startSystem(Phaser.Physics.ARCADE);
 
-  //  Phaser will automatically pause if the browser tab the game is in loses focus. You can disable that here:
+  // draw a red colored rectangle to go below lava
+  var graphics = game.add.graphics(0, 0);
+  graphics.beginFill(0xDD2200, 1);
+  graphics.drawRect(-2000,0, 4000, 4000);
+  graphics.endFill();
+
+  //  Phaser will automatically pause if the browser tab the game is in loses focus. Disabled this below.
   this.stage.disableVisibilityChange = true;
 
   background = game.add.tileSprite(-2000, -400, 4000, 400, "background");
@@ -28,7 +34,6 @@ var create = function(){
 
   lava = game.add.tileSprite(-2000, 365,4000,180,"lava");
   lava.scale.x = 1;
-
 
   // Create instructions
   var margin = 10;
@@ -44,7 +49,7 @@ var create = function(){
 
 
   // Create the initial player
-  player = new Player(game, 0, 0, true);
+  player = new Player(game, 0, 0, false);
   game.add.existing(player);
   lava.bringToTop(); // player falls behind lava
 
@@ -52,26 +57,37 @@ var create = function(){
 
   // Respawns the player 
   socket.on('newLocation', function(data){
-    player = new Player(game, data.x, data.y, true);
+    player = new Player(game, data.x, data.y, false);
     game.add.existing(player);
     lava.bringToTop();
-
   });
 
   // Syncs player to the server
   socket.on('sync', function(data){
     var syncKeys = Object.keys(data);
     syncKeys.forEach(function(key) {
-      if (key !==socket.id) {
+      if (key !== socket.id) {
         if (otherChickens[key]) {
           otherChickens[key].x = data[key].positionX;
           otherChickens[key].y = data[key].positionY;
           otherChickens[key].body.velocity.x = data[key].velocityX;
           otherChickens[key].body.velocity.y = data[key].velocityY;
+          if (otherChickens[key].score !== data[key].kills) {
+            otherChickens[key].score = data[key].kills;
+            upgradeChicken(otherChickens[key], data[key].kills);
+          }
         } else {
-          newChicken = new Player(game, data[key].positionX, data[key].positionY, false);
+          newChicken = new Player(game, data[key].positionX, data[key].positionY, key);
           game.add.existing(newChicken);
           otherChickens[key] = newChicken;
+          otherChickens[key].score = data[key].kills;
+          upgradeChicken(otherChickens[key], data[key].kills);
+          lava.bringToTop();
+        }
+      } else {
+        if (player.score !== data[key].kills) {
+          player.score = data[key].kills;
+          upgradeChicken(player, player.score);
         }
       }
     });
@@ -87,7 +103,7 @@ var create = function(){
   platforms.enableBody = true;
   
   platformLocations.forEach(function(platformCoords){
-    var platform = platforms.create(platformCoords[0],platformCoords[1], platformCoords[2]);
+    var platform = platforms.create(platformCoords[0], platformCoords[1], platformCoords[2]);
     platform.scale.x = platformCoords[3];
     platform.scale.y = platformCoords[3];
     platform.anchor.setTo(0.5, 0.5);
@@ -105,3 +121,12 @@ var create = function(){
 
   cursors = game.input.keyboard.createCursorKeys();
 };
+
+
+var upgradeChicken = function(chicken, score) {
+  // put upgrading system here
+  // example: chicken.scale.x = 2 + (0.5*score); 
+  //          chicken.scale.y = 2 + (0.5*score);
+  // then we would need to update where ever else chicken.scale is used
+};
+

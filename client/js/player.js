@@ -1,10 +1,13 @@
-Player = function(game, x, y, self) {
+Player = function(game, x, y, socketId) {
 
   var jumpSpeed = -700; // intital speed of chicken jump
   var minJump = 300; // amount jump speed needs to decrease before player can stop jumping
   this.dashing = false; // dashing property for other player chickens
   this.dashMeter = 0; // amount of stored dash
   var dashMax = 1500; // maximum value for dash
+  this.socketId = socketId;
+  this.lastCollidedWith = null;
+  this.score = 0;
 
   Phaser.Sprite.call(this, game, x, y, 'chicken');
 
@@ -26,31 +29,39 @@ Player = function(game, x, y, self) {
   this.checkWorldBounds = true;
 
 
-  if (self) {
+  if (!socketId) {
     this.outOfBoundsKill = true;
+    currentChicken = this;
     this.events.onKilled.add(function() {
       console.log('Woe is me!!!');
-      socket.emit('death');
+
+        var loser = game.add.bitmapText(-250,
+                                        0, 
+                                        'carrier_command', 
+                                        'YOU DIED', 50);
+        loser.lifespan = 1500;
+
+      game.time.events.add(1000, function() {
+        socket.emit('death', { 'killer' : currentChicken.lastCollidedWith });
+      });
     });
   }
 
   this.jump = function() {
-
     this.body.velocity.y = jumpSpeed;
     this.animations.stop();
     this.frame = 24;
-  }
+  };
 
   this.stopJump = function() {
-
     if (this.body.velocity.y < 0 && this.body.velocity.y > jumpSpeed + minJump) {
       this.body.velocity.y = 0;
     }
-  }
+  };
 
   this.dash = function() {
     var mathSign = player.scale.x > 0 ? 1 : -1;
-    player.body.velocity.x += -mathSign * this.dashMeter
+    player.body.velocity.x += -mathSign * this.dashMeter;
     this.dashMeter = 0;
 
     this.animations.play('flying');

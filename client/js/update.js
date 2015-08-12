@@ -9,6 +9,14 @@ var stoppingTime = -100;
 
 var update = function(){
 
+  if (player) {
+    var score = game.add.bitmapText(-100,
+                                  - game.camera.height / 2 + 30, 
+                                  'carrier_command', 
+                                  'SCORE:'+player.score, 30);
+    score.lifespan = 1;
+  }
+
   // Send sync update every syncRate number of frames
   var syncRate = 2;
 
@@ -23,7 +31,7 @@ var update = function(){
   }
 
   var collideChickens = function(otherChicken, thisChicken) {
-    
+    thisChicken.lastCollidedWith = otherChicken.socketId;
     var right;
     var left;
     if (otherChicken.x > thisChicken.x) {
@@ -130,7 +138,11 @@ var addAnimations = function(chicken) {
 };
 
 var sendSync = function() {
-  socket.emit('sync', {'PX': player.x, 'PY': player.y,
-                       'VX': player.body.velocity.x, 'VY': player.body.velocity.y,
-                       'dashBool': dashButton.isDown});
+  socket.emit('sync', {'PX': player.x, 
+                       'PY': player.y,
+                       'VX': player.body.velocity.x, 
+                       'VY': player.body.velocity.y,
+                       'dashBool': dashButton.isDown
+                      }
+             );
 };
