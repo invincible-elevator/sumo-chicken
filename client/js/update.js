@@ -1,6 +1,7 @@
-playerMaxSpeed = 500;
-playerAccleration = 20;
-playerDecceleration = 10;
+playerMaxSpeed = 300;
+playerGroundAccleration = 40;
+playerAirAccleration = 20;
+playerDecceleration = 30;
 
 syncTimer = 0;
 var stopping = null;
@@ -62,19 +63,23 @@ var update = function(){
 
 
   if(cursors.left.isDown && player.body.velocity.x > -playerMaxSpeed) {
-    player.body.velocity.x -= playerAccleration;
+    player.body.velocity.x -= (player.body.touching.down ? playerGroundAccleration : playerAirAccleration);
     player.scale.x = 2;
 
   } else if (cursors.right.isDown && player.body.velocity.x < playerMaxSpeed) {
-    player.body.velocity.x += playerAccleration;
+    player.body.velocity.x += (player.body.touching.down ? playerGroundAccleration : playerAirAccleration);
     player.scale.x = -2;
 
   } else {
     if (player.body.velocity.x < 0) {
-      player.body.velocity.x = Math.min(player.body.velocity.x + playerDecceleration, 0);
+      if (player.body.touching.down) {
+        player.body.velocity.x = Math.min(player.body.velocity.x + playerDecceleration, 0);
+      }
 
     } else if (player.body.velocity.x > 0) {
-      player.body.velocity.x = Math.max(player.body.velocity.x - playerDecceleration, 0);
+      if (player.body.touching.down) {
+        player.body.velocity.x = Math.max(player.body.velocity.x - playerDecceleration, 0);
+      }
 
     } else {
       if (player.body.touching.down) {
@@ -102,14 +107,14 @@ var update = function(){
   }
 
   // Jump if on ground and move upward until jump runs out or lets go of space
-  var jumpSpeed = -900;
+  var jumpSpeed = -800;
   if(jumpButton.isDown && player.body.touching.down) {
     player.body.velocity.y = jumpSpeed;
     player.animations.stop();
     player.frame = 24; 
 
   } else if (!jumpButton.isDown && !player.body.touching.down) {
-    if (player.body.velocity.y < 0 && player.body.velocity.y > jumpSpeed + 100) {
+    if (player.body.velocity.y < 0 && player.body.velocity.y > jumpSpeed + 300) {
       player.body.velocity.y = 0;
     }
   }

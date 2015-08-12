@@ -6,7 +6,7 @@ var create = function(){
 
   // platforms are [x, y, spriteKey, scale] and ordered by height
   var platformLocations = [[0, -200, 'platform', 2],
-                           [-450, -0, 'platform', 2], [450, -0, 'platform', 2],
+                           [-450, -25, 'platform', 2], [450, -25, 'platform', 2],
                            [0, -75, 'platform', 1],
                            [0, 100, 'platform', 2],
                            [200, 200, 'platform', 1], [-200, 200, 'platform', 1],
@@ -30,7 +30,11 @@ var create = function(){
 
 
   // instructions
-  bmpText = game.add.bitmapText(-160, -170, 'carrier_command', 'Move: arrow keys\n\nJump: SPACEBAR\n\nDash: C', 17);
+  var margin = 10;
+  bmpText = game.add.bitmapText(-game.camera.width / 2 + margin,
+                                -game.camera.height / 2 + margin, 
+                                'carrier_command', 
+                                'Move: arrow keys\n\nJump: SPACEBAR\n\nDash: C', 17);
 
   game.time.events.add(6000, function() {
     game.add.tween(bmpText).to({y: -170}, 1500, Phaser.Easing.Linear.None, true);
