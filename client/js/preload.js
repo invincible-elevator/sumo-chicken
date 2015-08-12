@@ -1,6 +1,8 @@
 var preload = function(){
   console.log('preload working');
 
+  
+  game. load.bitmapFont('carrier_command', 'assets/fonts/bitmapFonts/carrier_command.png', 'assets/fonts/bitmapFonts/carrier_command.xml');
   game.load.spritesheet('chicken', 'assets/Chicken.png', 32, 32);
   game.load.image('platform', 'assets/platform.png');
   game.load.image('background', 'assets/forest.png');
