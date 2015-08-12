@@ -19,6 +19,12 @@ var create = function(){
   
   game.physics.startSystem(Phaser.Physics.ARCADE);
 
+  // draw a red colored rectangle to go below lava
+  var graphics = game.add.graphics(0, 0);
+  graphics.beginFill(0xDD2200, 1);
+  graphics.drawRect(-2000,0, 4000, 4000);
+  graphics.endFill();
+
   //  Phaser will automatically pause if the browser tab the game is in loses focus. Disabled this below.
   this.stage.disableVisibilityChange = true;
 
@@ -28,7 +34,6 @@ var create = function(){
 
   lava = game.add.tileSprite(-2000, 365,4000,180,"lava");
   lava.scale.x = 1;
-
 
   // Create instructions
   var margin = 10;
@@ -71,6 +76,7 @@ var create = function(){
           newChicken = new Player(game, data[key].positionX, data[key].positionY, key);
           game.add.existing(newChicken);
           otherChickens[key] = newChicken;
+          lava.bringToTop();
         }
       } else {
         player.score = data[key].kills;

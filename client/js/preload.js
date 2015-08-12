@@ -11,4 +11,5 @@ var preload = function(){
 
   game.stage.smoothed = false;
 
+  game.stage.backgroundColor = '#141B2D';
 };
