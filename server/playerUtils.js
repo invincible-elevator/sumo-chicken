@@ -38,11 +38,16 @@ var incrementKills = function(socketID) {
   playerInformation[socketID].kills ++;
 };
 
+var resetKills = function(socketID) {
+  playerInformation[socketID].kills = 0;
+};
+
 module.exports = {
   newPlayer: newPlayer,
   updatePlayer: updatePlayer,
   dcPlayer: dcPlayer,
   getPlayers: getPlayers,
   getStartLoc: getStartLoc,
-  incrementKills: incrementKills
+  incrementKills: incrementKills,
+  resetKills: resetKills
 };

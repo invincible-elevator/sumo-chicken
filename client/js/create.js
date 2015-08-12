@@ -72,14 +72,23 @@ var create = function(){
           otherChickens[key].y = data[key].positionY;
           otherChickens[key].body.velocity.x = data[key].velocityX;
           otherChickens[key].body.velocity.y = data[key].velocityY;
+          if (otherChickens[key].score !== data[key].kills) {
+            otherChickens[key].score = data[key].kills;
+            upgradeChicken(otherChickens[key], data[key].kills);
+          }
         } else {
           newChicken = new Player(game, data[key].positionX, data[key].positionY, key);
           game.add.existing(newChicken);
           otherChickens[key] = newChicken;
+          otherChickens[key].score = data[key].kills;
+          upgradeChicken(otherChickens[key], data[key].kills);
           lava.bringToTop();
         }
       } else {
-        player.score = data[key].kills;
+        if (player.score !== data[key].kills) {
+          player.score = data[key].kills;
+          upgradeChicken(player, player.score);
+        }
       }
     });
     for (var key in otherChickens) {
@@ -112,3 +121,12 @@ var create = function(){
 
   cursors = game.input.keyboard.createCursorKeys();
 };
+
+
+var upgradeChicken = function(chicken, score) {
+  // put upgrading system here
+  // example: chicken.scale.x = 2 + (0.5*score); 
+  //          chicken.scale.y = 2 + (0.5*score);
+  // then we would need to update where ever else chicken.scale is used
+};
+

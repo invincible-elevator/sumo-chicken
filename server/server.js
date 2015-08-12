@@ -18,6 +18,7 @@ io.on('connection', function(socket) {
 
   socket.on('death', function(data) {
     console.log('Death: ', socket.id, 'Killed by: ', data.killer);
+    playerUtils.resetKills(socket.id);
     if (data.killer !== null) playerUtils.incrementKills(data.killer);
     socket.emit('newLocation', playerUtils.getStartLoc());
     playerUtils.newPlayer(socket.id);
