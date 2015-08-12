@@ -1,12 +1,10 @@
-var create = function() {
+var bpmText;
 
+var create = function(){
   //  Phaser will automatically pause if the browser tab the game is in loses focus. You can disable that here:
   this.stage.disableVisibilityChange = true;
 
-  var platformLocations = [[400, 0, 'platform'], 
-                           [0, -300, 'platform'], 
-                           [0, 300, 'platform'], 
-                           [-400, 0, 'platform']];
+  var platformLocations = [[400, 0, 'platform'], [0,-300, 'platform'], [0,300, 'platform'], [-400,0, 'platform']];
 
   game.world.setBounds(-2000, -2000, 4000, 4000 );
   game.time.desiredFps = 45;
@@ -24,6 +22,15 @@ var create = function() {
   lava.scale.x = 1;
 
 
+  // instructions
+  bmpText = game.add.bitmapText(-160, -170, 'carrier_command', 'Move: arrow keys\nJump: SPACEBAR\nDash: C', 17);
+
+  game.time.events.add(6000, function() {
+    game.add.tween(bmpText).to({y: -170}, 1500, Phaser.Easing.Linear.None, true);
+    game.add.tween(bmpText).to({alpha: 0}, 1500, Phaser.Easing.Linear.None, true);
+  }, this);
+
+
   // Create the initial player
   player = new Player(game, 0, 0, true);
   game.add.existing(player);
@@ -36,23 +43,23 @@ var create = function() {
     player = new Player(game, data.x, data.y, true);
     game.add.existing(player);
     lava.bringToTop();
+
   });
 
   socket.on('sync', function(data){
     var syncKeys = Object.keys(data);
     syncKeys.forEach(function(key) {
-      if (key !== socket.id) {
+      if (key !==socket.id) {
         if (otherChickens[key]) {
+          // console.log(otherChickens[key].x,otherChickens[key].y)
           otherChickens[key].x = data[key].positionX;
           otherChickens[key].y = data[key].positionY;
           otherChickens[key].body.velocity.x = data[key].velocityX;
           otherChickens[key].body.velocity.y = data[key].velocityY;
-          otherChickens[key].dashing = data[key].dashingBool;
         } else {
           newChicken = new Player(game, data[key].positionX, data[key].positionY, false);
           game.add.existing(newChicken);
           otherChickens[key] = newChicken;
-          lava.bringToTop();
         }
       }
     });
@@ -69,7 +76,7 @@ var create = function() {
   platforms.enableBody = true;
   
   platformLocations.forEach(function(platformCoords){
-    var platform = platforms.create(platformCoords[0], platformCoords[1], platformCoords[2]);
+    var platform = platforms.create(platformCoords[0],platformCoords[1], platformCoords[2]);
     platform.scale.x = 2;
     platform.scale.y = 2;
     platform.anchor.setTo(0.5, 0.5);
@@ -81,12 +88,11 @@ var create = function() {
   dashButton = game.input.keyboard.addKey(Phaser.Keyboard.C);
 
   dashButton.onDown.add(function() {
-    player.animations.play('flying');
     var mathSign = player.scale.x > 0 ? 1 : -1;
     player.body.velocity.x += -mathSign * player.dash();
+    player.animations.play('flying');
   }, this);
 
   cursors = game.input.keyboard.createCursorKeys();
 
 };
-
