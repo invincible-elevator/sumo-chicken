@@ -3,6 +3,8 @@ playerAccleration = 14;
 playerDecceleration = 9;
 
 syncTimer = 0;
+var stopping = null;
+var stoppingTime = -100;
 
 var update = function(){
   var syncRate = 2; // should be 3
@@ -13,6 +15,10 @@ var update = function(){
   syncTimer++;
 
   game.physics.arcade.collide(player, platforms);
+
+  if (stoppingTime + 2 * syncRate === syncTimer) {
+    stopping.body.velocity.x = 0;
+  }
 
   var collideChickens = function(otherChicken, thisChicken) {
     
@@ -28,12 +34,15 @@ var update = function(){
 
     var diff = otherChicken.body.velocity.x + thisChicken.body.velocity.x;
     if (diff > 0) {
-      left.body.velocity.x = 0;
+      // left.body.velocity.x = 0;
       right.body.velocity.x = right.body.velocity.x * 1.5;
+      stopping = left;
     } else {
-      right.body.velocity.x = 0;
+      // right.body.velocity.x = 0;
       left.body.velocity.x = left.body.velocity.x * 1.5;
+      stopping = right;
     }
+    stoppingTime = syncTimer;
   }
 
   for (var key in otherChickens) {
