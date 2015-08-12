@@ -1,19 +1,21 @@
-playerMaxSpeed = 500;
-playerAccleration = 14;
-playerDecceleration = 9;
+playerMaxSpeed = 300;
+playerGroundAccleration = 30;
+playerAirAccleration = 20;
+playerDecceleration = 20;
 
 syncTimer = 0;
 var stopping = null;
 var stoppingTime = -100;
 
 var update = function(){
-  var syncRate = 2; // should be 3
+
+  // Send sync update every syncRate number of frames
+  var syncRate = 2;
 
   if (syncTimer % syncRate === 0) {
     sendSync();
   }
   syncTimer++;
-
 
   // By waiting for the next sync before stopping, I believe this improves hit detection online
   if (stoppingTime + syncRate === syncTimer) {
@@ -62,19 +64,23 @@ var update = function(){
 
 
   if(cursors.left.isDown && player.body.velocity.x > -playerMaxSpeed) {
-    player.body.velocity.x -= playerAccleration;
+    player.body.velocity.x -= (player.body.touching.down ? playerGroundAccleration : playerAirAccleration);
     player.scale.x = 2;
 
   } else if (cursors.right.isDown && player.body.velocity.x < playerMaxSpeed) {
-    player.body.velocity.x += playerAccleration;
+    player.body.velocity.x += (player.body.touching.down ? playerGroundAccleration : playerAirAccleration);
     player.scale.x = -2;
 
   } else {
     if (player.body.velocity.x < 0) {
-      player.body.velocity.x = Math.min(player.body.velocity.x + playerDecceleration, 0);
+      if (player.body.touching.down) {
+        player.body.velocity.x = Math.min(player.body.velocity.x + playerDecceleration, 0);
+      }
 
     } else if (player.body.velocity.x > 0) {
-      player.body.velocity.x = Math.max(player.body.velocity.x - playerDecceleration, 0);
+      if (player.body.touching.down) {
+        player.body.velocity.x = Math.max(player.body.velocity.x - playerDecceleration, 0);
+      }
 
     } else {
       if (player.body.touching.down) {
@@ -90,28 +96,16 @@ var update = function(){
     } else {
       player.frame = 0;
     }
-  }
 
-  // Makes the app take double the processing, but looks good
-  // player.animations.currentAnim.speed = Math.abs(player.body.velocity.x / 8) + 5;
-
-  // Takes almost no processing, but looks worse
-
-  if (player.body.touching.down) {
+    // change animation speed
     player.animations.currentAnim.delay = Math.min(1 / (Math.abs(player.body.velocity.x) * 0.00009), 100);
   }
 
   // Jump if on ground and move upward until jump runs out or lets go of space
-  var jumpSpeed = -850;
   if(jumpButton.isDown && player.body.touching.down) {
-    player.body.velocity.y = jumpSpeed;
-    player.animations.stop();
-    player.frame = 24; 
-
+    player.jump();
   } else if (!jumpButton.isDown && !player.body.touching.down) {
-    if (player.body.velocity.y < 0 && player.body.velocity.y > jumpSpeed + 100) {
-      player.body.velocity.y = 0;
-    }
+    player.stopJump();
   }
 
   // Increase stored dashMeter

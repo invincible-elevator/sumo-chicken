@@ -1,10 +1,15 @@
 var bpmText;
 
 var create = function(){
-  //  Phaser will automatically pause if the browser tab the game is in loses focus. You can disable that here:
-  this.stage.disableVisibilityChange = true;
 
-  var platformLocations = [[400, 0, 'platform'], [0,-300, 'platform'], [0,300, 'platform'], [-400,0, 'platform']];
+  // platforms are [x, y, spriteKey, scale] and ordered by height
+  var platformLocations = [[0, -200, 'platform', 2],
+                           [-450, -25, 'platform', 2], [450, -25, 'platform', 2],
+                           [0, -75, 'cloud', 1],
+                           [0, 100, 'platform', 2],
+                           [200, 200, 'cloud', 1], [-200, 200, 'cloud', 1],
+                           [0, 300, 'cloud', 1],
+                           [400, 350, 'platform', 2], [-400, 350, 'platform', 2]];
 
   game.world.setBounds(-2000, -2000, 4000, 4000 );
   game.time.desiredFps = 45;
@@ -14,6 +19,9 @@ var create = function(){
   
   game.physics.startSystem(Phaser.Physics.ARCADE);
 
+  //  Phaser will automatically pause if the browser tab the game is in loses focus. You can disable that here:
+  this.stage.disableVisibilityChange = true;
+
   background = game.add.tileSprite(-2000, -400, 4000, 400, "background");
   background.scale.x = 2;
   background.scale.y = 2;
@@ -22,8 +30,12 @@ var create = function(){
   lava.scale.x = 1;
 
 
-  // instructions
-  bmpText = game.add.bitmapText(-160, -170, 'carrier_command', 'Move: arrow keys\n\nJump: SPACEBAR\n\nDash: C', 17);
+  // Create instructions
+  var margin = 10;
+  bmpText = game.add.bitmapText(-game.camera.width / 2 + margin,
+                                -game.camera.height / 2 + margin, 
+                                'carrier_command', 
+                                'Move: arrow keys\n\nJump: SPACEBAR\n\nDash: C', 17);
 
   game.time.events.add(6000, function() {
     game.add.tween(bmpText).to({y: -170}, 1500, Phaser.Easing.Linear.None, true);
@@ -46,12 +58,12 @@ var create = function(){
 
   });
 
+  // Syncs player to the server
   socket.on('sync', function(data){
     var syncKeys = Object.keys(data);
     syncKeys.forEach(function(key) {
       if (key !==socket.id) {
         if (otherChickens[key]) {
-          // console.log(otherChickens[key].x,otherChickens[key].y)
           otherChickens[key].x = data[key].positionX;
           otherChickens[key].y = data[key].positionY;
           otherChickens[key].body.velocity.x = data[key].velocityX;
@@ -70,29 +82,26 @@ var create = function(){
     }
   });
 
-
   // Create platforms
   platforms = game.add.group();
   platforms.enableBody = true;
   
   platformLocations.forEach(function(platformCoords){
     var platform = platforms.create(platformCoords[0],platformCoords[1], platformCoords[2]);
-    platform.scale.x = 2;
-    platform.scale.y = 2;
+    platform.scale.x = platformCoords[3];
+    platform.scale.y = platformCoords[3];
     platform.anchor.setTo(0.5, 0.5);
     platform.body.immovable = true;
   });
 
+  // Create button inputs
   jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
   dashButton = game.input.keyboard.addKey(Phaser.Keyboard.C);
 
   dashButton.onDown.add(function() {
-    var mathSign = player.scale.x > 0 ? 1 : -1;
-    player.body.velocity.x += -mathSign * player.dash();
-    player.animations.play('flying');
+    player.dash();
   }, this);
 
   cursors = game.input.keyboard.createCursorKeys();
-
 };
