@@ -44,7 +44,7 @@ var create = function(){
 
 
   // Create the initial player
-  player = new Player(game, 0, 0, true);
+  player = new Player(game, 0, 0, false);
   game.add.existing(player);
   lava.bringToTop(); // player falls behind lava
 
@@ -52,7 +52,7 @@ var create = function(){
 
   // Respawns the player 
   socket.on('newLocation', function(data){
-    player = new Player(game, data.x, data.y, true);
+    player = new Player(game, data.x, data.y, false);
     game.add.existing(player);
     lava.bringToTop();
   });
@@ -61,17 +61,19 @@ var create = function(){
   socket.on('sync', function(data){
     var syncKeys = Object.keys(data);
     syncKeys.forEach(function(key) {
-      if (key !==socket.id) {
+      if (key !== socket.id) {
         if (otherChickens[key]) {
           otherChickens[key].x = data[key].positionX;
           otherChickens[key].y = data[key].positionY;
           otherChickens[key].body.velocity.x = data[key].velocityX;
           otherChickens[key].body.velocity.y = data[key].velocityY;
         } else {
-          newChicken = new Player(game, data[key].positionX, data[key].positionY, false);
+          newChicken = new Player(game, data[key].positionX, data[key].positionY, key);
           game.add.existing(newChicken);
           otherChickens[key] = newChicken;
         }
+      } else {
+        player.score = data[key].kills;
       }
     });
     for (var key in otherChickens) {

@@ -17,7 +17,8 @@ var newPlayer = function(socketID) {
     velocityY: 0,
     positionX: startingLocation.x,
     positionY: startingLocation.y,
-    dashingBool: false
+    dashingBool: false,
+    kills: 0
   };
 };
 
@@ -33,10 +34,15 @@ var dcPlayer = function(socketID) {
   delete playerInformation[socketID];
 };
 
+var incrementKills = function(socketID) {
+  playerInformation[socketID].kills ++;
+};
+
 module.exports = {
   newPlayer: newPlayer,
   updatePlayer: updatePlayer,
   dcPlayer: dcPlayer,
   getPlayers: getPlayers,
-  getStartLoc: getStartLoc
+  getStartLoc: getStartLoc,
+  incrementKills: incrementKills
 };

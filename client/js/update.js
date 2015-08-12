@@ -9,6 +9,14 @@ var stoppingTime = -100;
 
 var update = function(){
 
+  if (player) {
+    var score = game.add.bitmapText(-100,
+                                  - game.camera.height / 2 + 30, 
+                                  'carrier_command', 
+                                  'SCORE:'+player.score, 30);
+    score.lifespan = 1;
+  }
+
   // Send sync update every syncRate number of frames
   var syncRate = 2;
 
@@ -23,6 +31,7 @@ var update = function(){
   }
 
   var collideChickens = function(otherChicken, thisChicken) {
+    thisChicken.lastCollidedWith = otherChicken.socketId;
     var right;
     var left;
     if (otherChicken.x > thisChicken.x) {

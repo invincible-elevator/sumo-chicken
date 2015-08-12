@@ -1,10 +1,13 @@
-Player = function(game, x, y, self) {
+Player = function(game, x, y, socketId) {
 
   var jumpSpeed = -700; // intital speed of chicken jump
   var minJump = 300; // amount jump speed needs to decrease before player can stop jumping
   this.dashing = false; // dashing property for other player chickens
   this.dashMeter = 0; // amount of stored dash
   var dashMax = 1500; // maximum value for dash
+  this.socketId = socketId;
+  this.lastCollidedWith = null;
+  this.score = 0;
 
   Phaser.Sprite.call(this, game, x, y, 'chicken');
 
@@ -26,11 +29,21 @@ Player = function(game, x, y, self) {
   this.checkWorldBounds = true;
 
 
-  if (self) {
+  if (!socketId) {
     this.outOfBoundsKill = true;
+    currentChicken = this;
     this.events.onKilled.add(function() {
       console.log('Woe is me!!!');
-      socket.emit('death');
+
+        var loser = game.add.bitmapText(-250,
+                                        0, 
+                                        'carrier_command', 
+                                        'YOU DIED', 50);
+        loser.lifespan = 1500;
+
+      game.time.events.add(1000, function() {
+        socket.emit('death', { 'killer' : currentChicken.lastCollidedWith });
+      });
     });
   }
 
