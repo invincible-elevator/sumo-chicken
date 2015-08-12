@@ -16,6 +16,7 @@ var update = function(){
 
   game.physics.arcade.collide(player, platforms);
 
+  // By waiting for the next sync before stopping, I believe this improves hit detection online
   if (stoppingTime + syncRate === syncTimer) {
     stopping.body.velocity.x = 0;
   }
