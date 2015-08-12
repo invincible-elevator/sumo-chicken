@@ -23,7 +23,6 @@ var update = function(){
   }
 
   var collideChickens = function(otherChicken, thisChicken) {
-    
     var right;
     var left;
     if (otherChicken.x > thisChicken.x) {
@@ -130,7 +129,11 @@ var addAnimations = function(chicken) {
 };
 
 var sendSync = function() {
-  socket.emit('sync', {'PX': player.x, 'PY': player.y,
-                       'VX': player.body.velocity.x, 'VY': player.body.velocity.y,
-                       'dashBool': dashButton.isDown});
+  socket.emit('sync', {'PX': player.x, 
+                       'PY': player.y,
+                       'VX': player.body.velocity.x, 
+                       'VY': player.body.velocity.y,
+                       'dashBool': dashButton.isDown
+                      }
+             );
 };

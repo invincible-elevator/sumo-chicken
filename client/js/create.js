@@ -19,7 +19,7 @@ var create = function(){
   
   game.physics.startSystem(Phaser.Physics.ARCADE);
 
-  //  Phaser will automatically pause if the browser tab the game is in loses focus. You can disable that here:
+  //  Phaser will automatically pause if the browser tab the game is in loses focus. Disabled this below.
   this.stage.disableVisibilityChange = true;
 
   background = game.add.tileSprite(-2000, -400, 4000, 400, "background");
@@ -55,7 +55,6 @@ var create = function(){
     player = new Player(game, data.x, data.y, true);
     game.add.existing(player);
     lava.bringToTop();
-
   });
 
   // Syncs player to the server
@@ -87,7 +86,7 @@ var create = function(){
   platforms.enableBody = true;
   
   platformLocations.forEach(function(platformCoords){
-    var platform = platforms.create(platformCoords[0],platformCoords[1], platformCoords[2]);
+    var platform = platforms.create(platformCoords[0], platformCoords[1], platformCoords[2]);
     platform.scale.x = platformCoords[3];
     platform.scale.y = platformCoords[3];
     platform.anchor.setTo(0.5, 0.5);

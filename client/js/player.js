@@ -35,22 +35,20 @@ Player = function(game, x, y, self) {
   }
 
   this.jump = function() {
-
     this.body.velocity.y = jumpSpeed;
     this.animations.stop();
     this.frame = 24;
-  }
+  };
 
   this.stopJump = function() {
-
     if (this.body.velocity.y < 0 && this.body.velocity.y > jumpSpeed + minJump) {
       this.body.velocity.y = 0;
     }
-  }
+  };
 
   this.dash = function() {
     var mathSign = player.scale.x > 0 ? 1 : -1;
-    player.body.velocity.x += -mathSign * this.dashMeter
+    player.body.velocity.x += -mathSign * this.dashMeter;
     this.dashMeter = 0;
 
     this.animations.play('flying');
