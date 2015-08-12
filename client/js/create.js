@@ -23,7 +23,7 @@ var create = function(){
 
 
   // instructions
-  bmpText = game.add.bitmapText(-160, -170, 'carrier_command', 'Move: arrow keys\nJump: SPACEBAR\nDash: C', 17);
+  bmpText = game.add.bitmapText(-160, -170, 'carrier_command', 'Move: arrow keys\n\nJump: SPACEBAR\n\nDash: C', 17);
 
   game.time.events.add(6000, function() {
     game.add.tween(bmpText).to({y: -170}, 1500, Phaser.Easing.Linear.None, true);
