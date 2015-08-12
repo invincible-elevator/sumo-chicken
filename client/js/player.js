@@ -6,7 +6,7 @@ Player = function(game, x, y, self) {
 
   game.physics.arcade.enable(this);
   
-  this.body.gravity.y = 1600;
+  this.body.gravity.y = 1300;
 
   this.anchor.setTo(0.5, 0.5);
   this.animations.add('walking', [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17], 10, true);

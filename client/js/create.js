@@ -7,10 +7,10 @@ var create = function(){
   // platforms are [x, y, spriteKey, scale] and ordered by height
   var platformLocations = [[0, -200, 'platform', 2],
                            [-450, -25, 'platform', 2], [450, -25, 'platform', 2],
-                           [0, -75, 'platform', 1],
+                           [0, -75, 'cloud', 1],
                            [0, 100, 'platform', 2],
-                           [200, 200, 'platform', 1], [-200, 200, 'platform', 1],
-                           [0, 300, 'platform', 1],
+                           [200, 200, 'cloud', 1], [-200, 200, 'cloud', 1],
+                           [0, 300, 'cloud', 1],
                            [400, 350, 'platform', 2], [-400, 350, 'platform', 2]];
 
   game.world.setBounds(-2000, -2000, 4000, 4000 );
