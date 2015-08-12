@@ -1,13 +1,18 @@
 Player = function(game, x, y, self) {
 
+  var jumpSpeed = -700; // intital speed of chicken jump
+  var minJump = 300; // amount jump speed needs to decrease before player can stop jumping
   this.dashing = false; // dashing property for other player chickens
+  this.dashMeter = 0; // amount of stored dash
+  var dashMax = 1500; // maximum value for dash
 
   Phaser.Sprite.call(this, game, x, y, 'chicken');
 
+  // create physics
   game.physics.arcade.enable(this);
-  
   this.body.gravity.y = 1300;
 
+  // create animations and graphics
   this.anchor.setTo(0.5, 0.5);
   this.animations.add('walking', [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17], 10, true);
   this.animations.add('flying', [18, 19, 20, 21, 22, 23], 10, true);
@@ -29,14 +34,28 @@ Player = function(game, x, y, self) {
     });
   }
 
-  this.dashMeter = 0;
+  this.jump = function() {
+
+    this.body.velocity.y = jumpSpeed;
+    this.animations.stop();
+    this.frame = 24;
+  }
+
+  this.stopJump = function() {
+
+    if (this.body.velocity.y < 0 && this.body.velocity.y > jumpSpeed + minJump) {
+      this.body.velocity.y = 0;
+    }
+  }
+
   this.dash = function() {
-    var dash = this.dashMeter;
+    var mathSign = player.scale.x > 0 ? 1 : -1;
+    player.body.velocity.x += -mathSign * this.dashMeter
     this.dashMeter = 0;
-    return dash;
+
+    this.animations.play('flying');
   };
 
-  var dashMax = 1500;
   this.chargeDash = function() {
     if (this.dashMeter < dashMax / 3) {
       this.dashMeter += 3; 

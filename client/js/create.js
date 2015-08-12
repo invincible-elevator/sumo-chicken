@@ -1,8 +1,6 @@
 var bpmText;
 
 var create = function(){
-  //  Phaser will automatically pause if the browser tab the game is in loses focus. You can disable that here:
-  this.stage.disableVisibilityChange = true;
 
   // platforms are [x, y, spriteKey, scale] and ordered by height
   var platformLocations = [[0, -200, 'platform', 2],
@@ -21,6 +19,9 @@ var create = function(){
   
   game.physics.startSystem(Phaser.Physics.ARCADE);
 
+  //  Phaser will automatically pause if the browser tab the game is in loses focus. You can disable that here:
+  this.stage.disableVisibilityChange = true;
+
   background = game.add.tileSprite(-2000, -400, 4000, 400, "background");
   background.scale.x = 2;
   background.scale.y = 2;
@@ -29,7 +30,7 @@ var create = function(){
   lava.scale.x = 1;
 
 
-  // instructions
+  // Create instructions
   var margin = 10;
   bmpText = game.add.bitmapText(-game.camera.width / 2 + margin,
                                 -game.camera.height / 2 + margin, 
@@ -57,12 +58,12 @@ var create = function(){
 
   });
 
+  // Syncs player to the server
   socket.on('sync', function(data){
     var syncKeys = Object.keys(data);
     syncKeys.forEach(function(key) {
       if (key !==socket.id) {
         if (otherChickens[key]) {
-          // console.log(otherChickens[key].x,otherChickens[key].y)
           otherChickens[key].x = data[key].positionX;
           otherChickens[key].y = data[key].positionY;
           otherChickens[key].body.velocity.x = data[key].velocityX;
@@ -81,7 +82,6 @@ var create = function(){
     }
   });
 
-
   // Create platforms
   platforms = game.add.group();
   platforms.enableBody = true;
@@ -94,16 +94,14 @@ var create = function(){
     platform.body.immovable = true;
   });
 
+  // Create button inputs
   jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
   dashButton = game.input.keyboard.addKey(Phaser.Keyboard.C);
 
   dashButton.onDown.add(function() {
-    var mathSign = player.scale.x > 0 ? 1 : -1;
-    player.body.velocity.x += -mathSign * player.dash();
-    player.animations.play('flying');
+    player.dash();
   }, this);
 
   cursors = game.input.keyboard.createCursorKeys();
-
 };

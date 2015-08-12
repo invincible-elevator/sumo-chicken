@@ -8,13 +8,14 @@ var stopping = null;
 var stoppingTime = -100;
 
 var update = function(){
-  var syncRate = 2; // should be 3
+
+  // Send sync update every syncRate number of frames
+  var syncRate = 2;
 
   if (syncTimer % syncRate === 0) {
     sendSync();
   }
   syncTimer++;
-
 
   // By waiting for the next sync before stopping, I believe this improves hit detection online
   if (stoppingTime + syncRate === syncTimer) {
@@ -95,28 +96,16 @@ var update = function(){
     } else {
       player.frame = 0;
     }
-  }
 
-  // Makes the app take double the processing, but looks good
-  // player.animations.currentAnim.speed = Math.abs(player.body.velocity.x / 8) + 5;
-
-  // Takes almost no processing, but looks worse
-
-  if (player.body.touching.down) {
+    // change animation speed
     player.animations.currentAnim.delay = Math.min(1 / (Math.abs(player.body.velocity.x) * 0.00009), 100);
   }
 
   // Jump if on ground and move upward until jump runs out or lets go of space
-  var jumpSpeed = -700;
   if(jumpButton.isDown && player.body.touching.down) {
-    player.body.velocity.y = jumpSpeed;
-    player.animations.stop();
-    player.frame = 24; 
-
+    player.jump();
   } else if (!jumpButton.isDown && !player.body.touching.down) {
-    if (player.body.velocity.y < 0 && player.body.velocity.y > jumpSpeed + 300) {
-      player.body.velocity.y = 0;
-    }
+    player.stopJump();
   }
 
   // Increase stored dashMeter
