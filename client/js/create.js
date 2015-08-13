@@ -2,6 +2,8 @@ var bpmText;
 
 var create = function(){
 
+  socket = io.connect();
+
   // platforms are [x, y, spriteKey, scale] and ordered by height
   var platformLocations = [[0, -200, 'platform', 2],
                            [-450, -25, 'platform', 2], [450, -25, 'platform', 2],
