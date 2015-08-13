@@ -18,32 +18,6 @@ var update = function(){
   //   stopping.body.velocity.x = 0;
   // }
 
-  var collideChickens = function(otherChicken, thisChicken) {
-    thisChicken.lastCollidedWith = otherChicken.socketId;
-    var right;
-    var left;
-    if (otherChicken.x > thisChicken.x) {
-      right = otherChicken;
-      left = thisChicken;
-    } else {
-      right = thisChicken;
-      left = otherChicken;
-    }
-
-    var diff = otherChicken.body.velocity.x + thisChicken.body.velocity.x;
-    if (diff > 0) {
-      // left.body.velocity.x = 0;
-      right.body.velocity.x = right.body.velocity.x * 1.5;
-      stopping = left;
-    } else {
-      // right.body.velocity.x = 0;
-      left.body.velocity.x = left.body.velocity.x * 1.5;
-      stopping = right;
-    }
-    stopping.body.velocity.x = 0;
-    stoppingTime = syncTimer;
-  };
-
   game.physics.arcade.collide(player, platforms);
 
   // Ensure that players cannot go through the platforms if other players jump on them
@@ -78,8 +52,9 @@ var update = function(){
       player.frame = 0;
     }
 
-    // change animation speed
-    player.animations.currentAnim.delay = Math.min(1 / (Math.abs(player.body.velocity.x) * 0.00009), 100);
+    // Change animation speed
+    // player.animations.currentAnim.delay = Math.min(1 / (Math.abs(player.body.velocity.x) * 0.00009), 100);
+    // player.animations.currentAnim.delay = Math.floor(Math.min(1 / (Math.abs(player.body.velocity.x) * 0.00009), 100) / 10) * 10;
   }
 
   // Jump if on ground and move upward until jump runs out or lets go of space
@@ -94,6 +69,31 @@ var update = function(){
 
 };
 
+var collideChickens = function(otherChicken, thisChicken) {
+  thisChicken.lastCollidedWith = otherChicken.socketId;
+  var right;
+  var left;
+  if (otherChicken.x > thisChicken.x) {
+    right = otherChicken;
+    left = thisChicken;
+  } else {
+    right = thisChicken;
+    left = otherChicken;
+  }
+
+  var diff = otherChicken.body.velocity.x + thisChicken.body.velocity.x;
+  if (diff > 0) {
+    // left.body.velocity.x = 0;
+    right.body.velocity.x = right.body.velocity.x * 1.5;
+    stopping = left;
+  } else {
+    // right.body.velocity.x = 0;
+    left.body.velocity.x = left.body.velocity.x * 1.5;
+    stopping = right;
+  }
+  stopping.body.velocity.x = 0;
+  stoppingTime = syncTimer;
+};
 
 var addAnimations = function(chicken) {
   var mathSign = chicken.body.velocity.x === 0 ? 0 : chicken.body.velocity.x > 0 ? 1 : -1;
