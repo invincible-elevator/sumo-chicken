@@ -1,7 +1,7 @@
 var playerInformation= {};
 
 var startingLocation = {x: 0,
-                        y: 0};
+                        y: 200};
 
 var getPlayers = function(socketID) {
   return playerInformation;

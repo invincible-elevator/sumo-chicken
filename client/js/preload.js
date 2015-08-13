@@ -1,6 +1,6 @@
 var preload = function(){
   
-  game. load.bitmapFont('carrier_command', 
+  game.load.bitmapFont('carrier_command', 
                         'assets/fonts/bitmapFonts/carrier_command.png', 
                         'assets/fonts/bitmapFonts/carrier_command.xml');
   game.load.spritesheet('chicken', 'assets/Chicken.png', 32, 32);

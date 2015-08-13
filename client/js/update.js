@@ -4,6 +4,7 @@ playerAirAccleration = 20;
 playerDecceleration = 20;
 
 syncTimer = 0;
+var syncRate = 2;
 var stopping = null;
 var stoppingTime = -100;
 
@@ -17,18 +18,10 @@ var update = function(){
     score.lifespan = 1;
   }
 
-  // Send sync update every syncRate number of frames
-  var syncRate = 2;
-
-  if (syncTimer % syncRate === 0) {
-    sendSync();
-  }
-  syncTimer++;
-
   // By waiting for the next sync before stopping, I believe this improves hit detection online
-  if (stoppingTime + syncRate === syncTimer) {
-    stopping.body.velocity.x = 0;
-  }
+  // if (stoppingTime + syncRate === syncTimer) {
+  //   stopping.body.velocity.x = 0;
+  // }
 
   var collideChickens = function(otherChicken, thisChicken) {
     thisChicken.lastCollidedWith = otherChicken.socketId;
@@ -52,6 +45,7 @@ var update = function(){
       left.body.velocity.x = left.body.velocity.x * 1.5;
       stopping = right;
     }
+    stopping.body.velocity.x = 0;
     stoppingTime = syncTimer;
   };
 
