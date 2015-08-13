@@ -20,6 +20,20 @@ module.exports = function(grunt) {
       }
     },
 
+    uglify: {
+      js: {
+        files: {
+          'public/build.js': [
+            'client/js/player.js',
+            'client/js/preload.js',
+            'client/js/create.js',
+            'client/js/update.js',
+            'client/js/game.js'
+          ]
+        }
+      }
+    },  
+
     watch: {
       files: ['<%= jshint.files %>'],
       tasks: ['build']
@@ -46,6 +60,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-nodemon');
 
