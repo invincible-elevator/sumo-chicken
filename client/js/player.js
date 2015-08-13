@@ -1,10 +1,17 @@
 Player = function(game, x, y, socketId) {
 
+  var maxSpeed = 300;
+  var groundAcceleration = 30;
+  var airAcceleration = 20;
+  var decceleration = 20;
+
   var jumpSpeed = -700; // intital speed of chicken jump
   var minJump = 300; // amount jump speed needs to decrease before player can stop jumping
+  
   this.dashing = false; // dashing property for other player chickens
   this.dashMeter = 0; // amount of stored dash
   var dashMax = 1500; // maximum value for dash
+  
   this.socketId = socketId;
   this.lastCollidedWith = null;
   this.score = 0;
@@ -47,6 +54,38 @@ Player = function(game, x, y, socketId) {
     });
   }
 
+  this.moveLeft = function() {
+    if (this.body.velocity.x > -maxSpeed) {
+      this.body.velocity.x -= (this.body.touching.down ? groundAcceleration : airAcceleration);
+      this.scale.x = 2;
+    }
+  }
+
+  this.moveRight = function() {
+    if (this.body.velocity.x < maxSpeed) {
+      this.body.velocity.x += (this.body.touching.down ? groundAcceleration : airAcceleration);
+      this.scale.x = -2;
+    }
+  }
+
+  this.decelerate = function() {
+    if (this.body.velocity.x < 0) {
+      if (this.body.touching.down) {
+        this.body.velocity.x = Math.min(this.body.velocity.x + decceleration, 0);
+      }
+
+    } else if (this.body.velocity.x > 0) {
+      if (this.body.touching.down) {
+        this.body.velocity.x = Math.max(this.body.velocity.x - decceleration, 0);
+      }
+
+    } else {
+      if (this.body.touching.down) {
+        this.frame = 0;
+      }
+    }
+  }
+
   this.jump = function() {
     this.body.velocity.y = jumpSpeed;
     this.animations.stop();
@@ -81,6 +120,19 @@ Player = function(game, x, y, socketId) {
       this.tint = 0xff66ff;
     }
   };
+
+  // level is an integer that starts at 0
+  this.setLevel = function(level) {
+
+    var bonus = (level * .25 + 1);
+
+    maxSpeed = 300 * bonus;
+    groundAcceleration = 30 * bonus;
+    airAcceleration = 20 * bonus;
+    deceleration = 20 * bonus;
+
+    jumpSpeed = -700 * Math.sqrt(bonus);
+  }
 
 };
 
