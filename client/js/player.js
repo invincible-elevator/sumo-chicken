@@ -136,8 +136,6 @@ Player = function(game, x, y, socketId) {
     jumpSpeed = -700 * Math.sqrt(bonus);
   };
 
-  console.log("player made");
-
 };
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
