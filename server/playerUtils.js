@@ -1,7 +1,19 @@
-var playerInformation= {};
+var playerInformation = {};
 
 var startingLocation = {x: 0,
                         y: 200};
+
+var Player = function() {
+  return {
+    velocityX: 0,
+    velocityY: 0,
+    positionX: startingLocation.x,
+    positionY: startingLocation.y,
+    dashingBool: false,
+    kills: 0,
+    paused: false,
+  };
+};
 
 var getPlayers = function(socketID) {
   return playerInformation;
@@ -12,14 +24,7 @@ var getStartLoc = function() {
 };
 
 var newPlayer = function(socketID) {
-  playerInformation[socketID] = {
-    velocityX: 0,
-    velocityY: 0,
-    positionX: startingLocation.x,
-    positionY: startingLocation.y,
-    dashingBool: false,
-    kills: 0
-  };
+  playerInformation[socketID] = Player();
 };
 
 var updatePlayer = function(socketID, data) {
@@ -42,6 +47,10 @@ var resetKills = function(socketID) {
   playerInformation[socketID].kills = 0;
 };
 
+var pausePlayer = function(socketID, pausedOrResumed) {
+  playerInformation[socketID].paused = pausedOrResumed;
+};
+
 module.exports = {
   newPlayer: newPlayer,
   updatePlayer: updatePlayer,
@@ -49,5 +58,6 @@ module.exports = {
   getPlayers: getPlayers,
   getStartLoc: getStartLoc,
   incrementKills: incrementKills,
-  resetKills: resetKills
+  resetKills: resetKills,
+  pausePlayer: pausePlayer
 };
