@@ -137,8 +137,10 @@ var create = function(){
 
 var upgradeChicken = function(chicken, score) {
   // put upgrading system here
-  // example: chicken.scale.x = 2 + (0.5*score); 
-  //          chicken.scale.y = 2 + (0.5*score);
-  // then we would need to update where ever else chicken.scale is used
+
+  // chicken.scale.x = 2 + (0.5*score); 
+  // chicken.scale.y = 2 + (0.5*score);
+
+  // chicken.body.mass = 1 + (0.5*score);
 };
 

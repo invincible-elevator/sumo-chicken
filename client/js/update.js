@@ -1,8 +1,3 @@
-playerMaxSpeed = 300;
-playerGroundAccleration = 30;
-playerAirAccleration = 20;
-playerDecceleration = 20;
-
 syncTimer = 0;
 var syncRate = 2;
 var stopping = null;
@@ -57,6 +52,7 @@ var update = function(){
     playerSprite.y = abovePlatform;
   });
 
+
   for (var key in otherChickens) {
     game.physics.arcade.collide(otherChickens[key], player, collideChickens);
     game.physics.arcade.collide(otherChickens[key], platforms);
@@ -64,31 +60,14 @@ var update = function(){
   }
 
 
+  if(cursors.left.isDown) {
+    player.moveLeft();
 
-  if(cursors.left.isDown && player.body.velocity.x > -playerMaxSpeed) {
-    player.body.velocity.x -= (player.body.touching.down ? playerGroundAccleration : playerAirAccleration);
-    player.scale.x = 2;
-
-  } else if (cursors.right.isDown && player.body.velocity.x < playerMaxSpeed) {
-    player.body.velocity.x += (player.body.touching.down ? playerGroundAccleration : playerAirAccleration);
-    player.scale.x = -2;
+  } else if (cursors.right.isDown) {
+    player.moveRight();
 
   } else {
-    if (player.body.velocity.x < 0) {
-      if (player.body.touching.down) {
-        player.body.velocity.x = Math.min(player.body.velocity.x + playerDecceleration, 0);
-      }
-
-    } else if (player.body.velocity.x > 0) {
-      if (player.body.touching.down) {
-        player.body.velocity.x = Math.max(player.body.velocity.x - playerDecceleration, 0);
-      }
-
-    } else {
-      if (player.body.touching.down) {
-        player.frame = 0;
-      }
-    }
+    player.decelerate()
   }
 
   if (player.body.touching.down) {
@@ -119,7 +98,7 @@ var update = function(){
 var addAnimations = function(chicken) {
   var mathSign = chicken.body.velocity.x === 0 ? 0 : chicken.body.velocity.x > 0 ? 1 : -1;
   if (mathSign !== 0) {
-    chicken.scale.x = mathSign > 0 ? -2 : 2;
+    chicken.scale.x = mathSign > 0 ? -Math.abs(chicken.scale.x) : Math.abs(chicken.scale.x);
   } 
   if (chicken.body.velocity.y !== 0) {
     chicken.animations.stop();
