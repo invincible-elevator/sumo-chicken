@@ -69,13 +69,13 @@ Player = function(game, x, y, socketId) {
 
   this.chargeDash = function() {
     if (this.dashMeter < dashMax / 3) {
-      this.dashMeter += 3; 
+      this.dashMeter += 6; 
       this.tint = 0xffffff;     
     } else if (this.dashMeter < dashMax * 2 / 3) {
-      this.dashMeter += 2;
+      this.dashMeter += 4;
       this.tint = 0xffccff;     
     } else if (this.dashMeter < dashMax) {
-      this.dashMeter += 1;
+      this.dashMeter += 2;
       this.tint = 0xff99ff;     
     } else {
       this.tint = 0xff66ff;
