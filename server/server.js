@@ -20,13 +20,13 @@ io.on('connection', function(socket) {
     console.log('Death: ', socket.id, 'Killed by: ', data.killer);
     playerUtils.resetKills(socket.id);
     if (data.killer !== null) playerUtils.incrementKills(data.killer);
+
     socket.emit('newLocation', playerUtils.getStartLoc());
     playerUtils.newPlayer(socket.id);
   });
 
   socket.on('sync', function(data) {
     playerUtils.updatePlayer(socket.id, data);
-    socket.emit('sync', playerUtils.getPlayers());
   });
 
   socket.on('disconnect', function() {
@@ -34,3 +34,8 @@ io.on('connection', function(socket) {
     playerUtils.dcPlayer(socket.id);
   });
 });
+
+// Tell the player to sync with ther server every 50ms (approx 2 frames)
+setInterval(function() {
+  io.sockets.emit('sync', playerUtils.getPlayers());
+}, 50);
