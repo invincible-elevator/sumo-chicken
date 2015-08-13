@@ -83,6 +83,7 @@ var create = function(){
       });
       for (var key in otherChickens) {
         if (syncKeys.indexOf(key) === -1) {
+          otherChickens[key].body.moves = true;
           delete otherChickens[key];
         }
       }
