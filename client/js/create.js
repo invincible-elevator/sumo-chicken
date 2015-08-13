@@ -127,8 +127,12 @@ var create = function(){
     player.dash();
   }, this);
 
+  var cameraMargin = 250;
   game.camera.follow(player);
-  game.camera.deadzone = new Phaser.Rectangle(150, 150, 500, 300);
+  game.camera.deadzone = new Phaser.Rectangle(cameraMargin, 
+                                              cameraMargin, 
+                                              game.camera.width - cameraMargin * 2, 
+                                              game.camera.height - cameraMargin * 2);
   game.camera.focusOnXY(0, 0);
 
   cursors = game.input.keyboard.createCursorKeys();
