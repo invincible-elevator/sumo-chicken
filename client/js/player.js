@@ -1,6 +1,6 @@
 Player = function(game, x, y, socketId) {
 
-  this.maxSpeed = 300;
+  var maxSpeed = 300;
   var groundAcceleration = 30;
   var airAcceleration = 20;
   var decceleration = 20;
@@ -56,7 +56,7 @@ Player = function(game, x, y, socketId) {
 
   this.moveLeft = function() {
     console.log('left');
-    if (this.body.velocity.x > -this.maxSpeed) {
+    if (this.body.velocity.x > -maxSpeed) {
       this.body.velocity.x -= (this.body.touching.down ? groundAcceleration : airAcceleration);
       this.scale.x = 2;
     }
@@ -64,7 +64,7 @@ Player = function(game, x, y, socketId) {
 
   this.moveRight = function() {
     console.log('right');
-    if (this.body.velocity.x < this.maxSpeed) {
+    if (this.body.velocity.x < maxSpeed) {
       this.body.velocity.x += (this.body.touching.down ? groundAcceleration : airAcceleration);
       this.scale.x = -2;
     }
@@ -122,6 +122,19 @@ Player = function(game, x, y, socketId) {
       this.tint = 0xff66ff;
     }
   };
+
+  // level is an integer that starts at 0
+  this.setLevel = function(level) {
+
+    var bonus = (level * .25 + 1);
+
+    maxSpeed = 300 * bonus;
+    groundAcceleration = 30 * bonus;
+    airAcceleration = 20 * bonus;
+    deceleration = 20 * bonus;
+
+    jumpSpeed = -700 * bonus;
+  }
 
 };
 

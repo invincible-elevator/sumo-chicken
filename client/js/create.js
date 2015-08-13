@@ -134,13 +134,8 @@ var create = function(){
   cursors = game.input.keyboard.createCursorKeys();
 };
 
-
 var upgradeChicken = function(chicken, score) {
   // put upgrading system here
-
-  // chicken.scale.x = 2 + (0.5*score); 
-  // chicken.scale.y = 2 + (0.5*score);
-
-  // chicken.body.mass = 1 + (0.5*score);
+  chicken.setLevel(score);
 };
 
