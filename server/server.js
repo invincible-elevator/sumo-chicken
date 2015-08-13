@@ -8,7 +8,7 @@ var server = http.Server(app);
 var io = require('socket.io')(server);
 var port = process.env.PORT || 8080;
 
-app.use(express.static(path.join(__dirname, '../client')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 server.listen(port);
 
