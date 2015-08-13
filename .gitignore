@@ -32,3 +32,6 @@ node_modules
 
 # Bower installed libraries
 lib
+
+# Minified code
+build.js
