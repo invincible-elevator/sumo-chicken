@@ -16,6 +16,8 @@ Player = function(game, x, y, socketId) {
   this.lastCollidedWith = null;
   this.score = 0;
 
+  this.paused = false;
+
   Phaser.Sprite.call(this, game, x, y, 'chicken');
 
   // create physics
@@ -59,14 +61,14 @@ Player = function(game, x, y, socketId) {
       this.body.velocity.x -= (this.body.touching.down ? groundAcceleration : airAcceleration);
       this.scale.x = 2;
     }
-  }
+  };
 
   this.moveRight = function() {
     if (this.body.velocity.x < maxSpeed) {
       this.body.velocity.x += (this.body.touching.down ? groundAcceleration : airAcceleration);
       this.scale.x = -2;
     }
-  }
+  };
 
   this.decelerate = function() {
     if (this.body.velocity.x < 0) {
@@ -84,7 +86,7 @@ Player = function(game, x, y, socketId) {
         this.frame = 0;
       }
     }
-  }
+  };
 
   this.jump = function() {
     this.body.velocity.y = jumpSpeed;
@@ -124,7 +126,7 @@ Player = function(game, x, y, socketId) {
   // level is an integer that starts at 0
   this.setLevel = function(level) {
 
-    var bonus = (level * .25 + 1);
+    var bonus = (level * 0.25 + 1);
 
     maxSpeed = 300 * bonus;
     groundAcceleration = 30 * bonus;
@@ -132,7 +134,7 @@ Player = function(game, x, y, socketId) {
     deceleration = 20 * bonus;
 
     jumpSpeed = -700 * Math.sqrt(bonus);
-  }
+  };
 
 };
 

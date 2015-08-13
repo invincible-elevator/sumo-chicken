@@ -29,6 +29,14 @@ io.on('connection', function(socket) {
     playerUtils.updatePlayer(socket.id, data);
   });
 
+  socket.on('pause', function() {
+    playerUtils.pausePlayer(socket.id,true);
+  });
+
+  socket.on('resume', function() {
+    playerUtils.pausePlayer(socket.id,false);
+  });
+
   socket.on('disconnect', function() {
     console.log('Disconnected: ', socket.id);
     playerUtils.dcPlayer(socket.id);
