@@ -41,7 +41,7 @@ var update = function(){
     player.moveRight();
 
   } else {
-    player.decelerate()
+    player.decelerate();
   }
 
   if (player.body.touching.down) {
