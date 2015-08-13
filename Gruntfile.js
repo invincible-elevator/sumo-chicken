@@ -1,6 +1,16 @@
 module.exports = function(grunt) {
 
   grunt.initConfig({
+
+    concurrent: {
+      target: {
+        tasks: ['nodemon', 'watch'],
+        options: {
+          logConcurrentOutput: true
+        }
+      }
+    },
+
     jshint: {
       files: ['Gruntfile.js', 'client/js/**/*.js', 'server/**/*.js'],
       options: {
@@ -12,7 +22,7 @@ module.exports = function(grunt) {
 
     watch: {
       files: ['<%= jshint.files %>'],
-      tasks: ['jshint']
+      tasks: ['build']
     },
 
     nodemon: {
@@ -33,6 +43,7 @@ module.exports = function(grunt) {
 
   });
 
+  grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-shell');
@@ -42,8 +53,13 @@ module.exports = function(grunt) {
     ['shell:install']
   );
 
-  grunt.registerTask('start',
+  grunt.registerTask('build',
     ['jshint',
-     'nodemon']
+     'uglify']
+  );
+
+  grunt.registerTask('start',
+    ['build',
+     'concurrent']
   );
 };
