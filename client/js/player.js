@@ -133,7 +133,7 @@ Player = function(game, x, y, socketId) {
     airAcceleration = 20 * bonus;
     deceleration = 20 * bonus;
 
-    jumpSpeed = -700 * bonus;
+    jumpSpeed = -700 * Math.sqrt(bonus);
   }
 
 };
