@@ -55,7 +55,6 @@ Player = function(game, x, y, socketId) {
   }
 
   this.moveLeft = function() {
-    console.log('left');
     if (this.body.velocity.x > -maxSpeed) {
       this.body.velocity.x -= (this.body.touching.down ? groundAcceleration : airAcceleration);
       this.scale.x = 2;
@@ -63,7 +62,6 @@ Player = function(game, x, y, socketId) {
   }
 
   this.moveRight = function() {
-    console.log('right');
     if (this.body.velocity.x < maxSpeed) {
       this.body.velocity.x += (this.body.touching.down ? groundAcceleration : airAcceleration);
       this.scale.x = -2;
