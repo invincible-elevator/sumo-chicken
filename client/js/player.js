@@ -16,6 +16,8 @@ Player = function(game, x, y, socketId) {
   this.lastCollidedWith = null;
   this.score = 0;
 
+  this.paused = false;
+
   Phaser.Sprite.call(this, game, x, y, 'chicken');
 
   // create physics

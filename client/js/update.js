@@ -28,9 +28,12 @@ var update = function(){
 
 
   for (var key in otherChickens) {
-    game.physics.arcade.collide(otherChickens[key], player, collideChickens);
-    game.physics.arcade.collide(otherChickens[key], platforms);
-    addAnimations(otherChickens[key]);
+    if (!otherChickens[key].paused) {
+      console.log('colliding')
+      game.physics.arcade.collide(otherChickens[key], player, collideChickens);
+      game.physics.arcade.collide(otherChickens[key], platforms);
+      addAnimations(otherChickens[key]);
+    }
   }
 
 
@@ -70,29 +73,31 @@ var update = function(){
 };
 
 var collideChickens = function(otherChicken, thisChicken) {
-  thisChicken.lastCollidedWith = otherChicken.socketId;
-  var right;
-  var left;
-  if (otherChicken.x > thisChicken.x) {
-    right = otherChicken;
-    left = thisChicken;
-  } else {
-    right = thisChicken;
-    left = otherChicken;
-  }
+  if (!otherChicken.paused) {
+    thisChicken.lastCollidedWith = otherChicken.socketId;
+    var right;
+    var left;
+    if (otherChicken.x > thisChicken.x) {
+      right = otherChicken;
+      left = thisChicken;
+    } else {
+      right = thisChicken;
+      left = otherChicken;
+    }
 
-  var diff = otherChicken.body.velocity.x + thisChicken.body.velocity.x;
-  if (diff > 0) {
-    // left.body.velocity.x = 0;
-    right.body.velocity.x = right.body.velocity.x * 1.5;
-    stopping = left;
-  } else {
-    // right.body.velocity.x = 0;
-    left.body.velocity.x = left.body.velocity.x * 1.5;
-    stopping = right;
+    var diff = otherChicken.body.velocity.x + thisChicken.body.velocity.x;
+    if (diff > 0) {
+      // left.body.velocity.x = 0;
+      right.body.velocity.x = right.body.velocity.x * 1.5;
+      stopping = left;
+    } else {
+      // right.body.velocity.x = 0;
+      left.body.velocity.x = left.body.velocity.x * 1.5;
+      stopping = right;
+    }
+    stopping.body.velocity.x = 0;
+    stoppingTime = syncTimer;
   }
-  stopping.body.velocity.x = 0;
-  stoppingTime = syncTimer;
 };
 
 var addAnimations = function(chicken) {
