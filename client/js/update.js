@@ -29,7 +29,6 @@ var update = function(){
 
   for (var key in otherChickens) {
     if (!otherChickens[key].paused) {
-      console.log('colliding')
       game.physics.arcade.collide(otherChickens[key], player, collideChickens);
       game.physics.arcade.collide(otherChickens[key], platforms);
       addAnimations(otherChickens[key]);

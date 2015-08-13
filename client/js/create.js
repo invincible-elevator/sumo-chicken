@@ -27,7 +27,7 @@ var create = function(){
 
   //  Phaser will automatically pause if the browser tab the game is in loses focus. Disabled this below.
   //  NOTE: Uncomment the following line for testing if you want to have two games playing in two browsers.
-  this.stage.disableVisibilityChange = true;
+  // this.stage.disableVisibilityChange = true;
 
   background = game.add.tileSprite(-2000, -400, 4000, 400, "background");
   background.scale.x = 2;
@@ -70,29 +70,9 @@ var create = function(){
       syncKeys.forEach(function(key) {
         if (key !== socket.id) {
           if (otherChickens[key]) {
-            if (!data[key].paused) {
-              otherChickens[key].body.moves = true;
-              otherChickens[key].paused = false;
-              otherChickens[key].x = data[key].positionX;
-              otherChickens[key].y = data[key].positionY;
-              otherChickens[key].body.velocity.x = data[key].velocityX;
-              otherChickens[key].body.velocity.y = data[key].velocityY;
-              if (otherChickens[key].score !== data[key].kills) {
-                otherChickens[key].score = data[key].kills;
-                upgradeChicken(otherChickens[key], data[key].kills);
-              }
-            } else {
-              otherChickens[key].tint = 0x707070;
-              otherChickens[key].body.moves = false;
-              otherChickens[key].paused = true;
-            }
+            syncExistingChicken(otherChickens[key], data[key]);
           } else {
-            newChicken = new Player(game, data[key].positionX, data[key].positionY, key);
-            game.add.existing(newChicken);
-            otherChickens[key] = newChicken;
-            otherChickens[key].score = data[key].kills;
-            upgradeChicken(otherChickens[key], data[key].kills);
-            lava.bringToTop();
+            addNewChicken(key, data[key]);
           }
         } else {
           if (player.score !== data[key].kills) {
@@ -164,3 +144,30 @@ var upgradeChicken = function(chicken, score) {
   chicken.setLevel(score);
 };
 
+var syncExistingChicken = function(chicken, data) {
+  if (!data.paused) {
+    chicken.body.moves = true;
+    chicken.paused = false;
+    chicken.x = data.positionX;
+    chicken.y = data.positionY;
+    chicken.body.velocity.x = data.velocityX;
+    chicken.body.velocity.y = data.velocityY;
+    if (chicken.score !== data.kills) {
+      chicken.score = data.kills;
+      upgradeChicken(chicken, data.kills);
+    }
+  } else {
+    chicken.tint = 0x707070;
+    chicken.body.moves = false;
+    chicken.paused = true;
+  }
+};
+
+var addNewChicken = function(socketId, data) {
+  newChicken = new Player(game, data.positionX, data.positionY, socketId);
+  game.add.existing(newChicken);
+  otherChickens[socketId] = newChicken;
+  otherChickens[socketId].score = data.kills;
+  upgradeChicken(otherChickens[socketId], data.kills);
+  lava.bringToTop();
+};
