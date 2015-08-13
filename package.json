@@ -7,6 +7,7 @@
     "bower": "1.4.x",
     "express": "^4.13.3",
     "grunt": "^0.4.5",
+    "grunt-concurrent": "^2.0.1",
     "grunt-contrib-jshint": "^0.11.2",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-nodemon": "^0.4.0",
