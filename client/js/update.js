@@ -1,7 +1,6 @@
 syncTimer = 0;
 var syncRate = 2;
 var stopping = null;
-var stoppingTime = -100;
 
 var update = function(){
 
@@ -13,10 +12,42 @@ var update = function(){
     score.lifespan = 1;
   }
 
-  // By waiting for the next sync before stopping, I believe this improves hit detection online
-  // if (stoppingTime + syncRate === syncTimer) {
-  //   stopping.body.velocity.x = 0;
-  // }
+  syncTimer++;
+  // Game updates every 2 frames with last update data received
+  if (!game.paused && syncTimer % syncRate === 0 && lastData) {
+
+    var syncKeys = Object.keys(lastData);
+    syncKeys.forEach(function(chicken) {
+      if (chicken !== socket.id) {
+        if (otherChickens[chicken]) {
+          syncExistingChicken(otherChickens[chicken], lastData[chicken]);
+        } else {
+          addNewChicken(chicken, lastData[chicken]);
+        }
+      } else {
+        if (player.score !== lastData[chicken].kills) {
+          player.score = lastData[chicken].kills;
+          upgradeChicken(player, player.score);
+        }
+      }
+    });
+    for (var chicken in otherChickens) {
+      if (syncKeys.indexOf(chicken) === -1) {
+        otherChickens[chicken].body.moves = true;
+        delete otherChickens[chicken];
+      }
+    }
+
+    lastData = null;
+
+    socket.emit('sync', {'PX': player.x, 
+                         'PY': player.y,
+                         'VX': player.body.velocity.x, 
+                         'VY': player.body.velocity.y,
+                         'dashBool': dashButton.isDown
+                        });
+
+  }
 
   game.physics.arcade.collide(player, platforms);
 
@@ -95,7 +126,6 @@ var collideChickens = function(otherChicken, thisChicken) {
       stopping = right;
     }
     stopping.body.velocity.x = 0;
-    stoppingTime = syncTimer;
   }
 };
 
