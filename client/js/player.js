@@ -47,10 +47,10 @@ Player = function(game, x, y, socketId) {
       console.log('Woe is me!!!');
 
         var loser = game.add.bitmapText(-250,
-                                        0, 
+                                        -200, 
                                         'carrier_command', 
                                         'YOU DIED', 50);
-        loser.lifespan = 1500;
+        loser.lifespan = 2000;
 
       game.time.events.add(1000, function() {
         socket.emit('death', { 'killer' : currentChicken.lastCollidedWith });
@@ -136,6 +136,16 @@ Player = function(game, x, y, socketId) {
     deceleration = 20 * bonus;
 
     jumpSpeed = -700 * Math.sqrt(bonus);
+  };
+
+  this.addUsernameLabel = function(username) {
+    if (!this.hasNameLabel) {
+      var color = !this.socketId ? '0xff0000' : '0xffffff';
+      label = game.add.bitmapText(-12, -25, 'carrier_command', username, 8);
+      label.tint = color;
+      this.addChild(label);
+      this.hasNameLabel = true;
+    }
   };
 
 };
