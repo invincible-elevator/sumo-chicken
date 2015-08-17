@@ -14,7 +14,7 @@ var update = function(){
   }
 
   syncTimer++;
-  if (!game.paused && syncTimer % 3 === 0 && lastData) {
+  if (!game.paused && syncTimer % 2 === 0 && lastData) {
     var syncKeys = Object.keys(lastData);
     syncKeys.forEach(function(chicken) {
       if (chicken !== socket.id) {
