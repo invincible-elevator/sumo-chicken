@@ -61,6 +61,10 @@ var create = function(){
   game.add.existing(player);
   lava.bringToTop(); // player falls behind lava
 
+  var style = { font: "14px Arial", fill: "#ffffff" };  
+  label = game.add.bitmapText(-12, -25, 'carrier_command', playerUsername, 8);
+  player.addChild(label);
+
   otherChickens = {};
 
   // Respawns the player 

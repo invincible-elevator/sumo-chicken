@@ -1,5 +1,5 @@
 var startGame = function() {
-  console.log(document.getElementById('username').value);
+  playerUsername = document.getElementById('username').value;
 
   var main = document.getElementById('main');
   main.parentNode.removeChild(main);
