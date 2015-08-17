@@ -3,7 +3,7 @@ var serverUtils = require('./serverUtils.js');
 var playerInformation = {};
 
 var startingLocation = {x: 0,
-                        y: 200};
+                        y: 0};
 
 var Player = function() {
   return {

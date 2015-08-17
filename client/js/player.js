@@ -37,11 +37,12 @@ Player = function(game, x, y, socketId) {
 
   this.checkWorldBounds = true;
 
-
   if (!socketId) {
     this.outOfBoundsKill = true;
+
     currentChicken = this;
     this.events.onKilled.add(function() {
+
       console.log('Woe is me!!!');
 
         var loser = game.add.bitmapText(-250,
