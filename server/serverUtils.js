@@ -1,12 +1,12 @@
-var lobbies = [];
+var lobbies = []; 
 
-// Example format of a lobby
-// lobbies.push({ '0': '', '1': '', '2': '', '3': '', '4': '', numPlayers: 0 }); 
+var playerLobbies = {}; // to improve lookup when finding lobby that a player is in
 
-var playerLobbies = {};
+var maxLobbySize = 6;
 
-var maxLobbySize = 5;
-
+/* Helper function: gets the next lobby with an empty space 
+ * returns a tuple of lobbyID and position in the lobby
+ */
 var getNextLobby = function() {
   var lobbyId, position;
   var i = 0;
@@ -25,7 +25,9 @@ var getNextLobby = function() {
       i++;
     }
   } 
-  if (lobbyId === undefined) {
+  if (lobbyId === undefined) { // if all lobbies are full, creates new lobby object
+    // Example format of a lobby
+    // lobbies.push({ '0': '', '1': '', '2': '', '3': '', '4': '', numPlayers: 0 }); 
     lobbies[i] = {numPlayers:0};
     for (var x = 0; x<maxLobbySize; x++) {
       lobbies[i][x] = '';
@@ -36,6 +38,7 @@ var getNextLobby = function() {
   return [lobbyId, position];
 };
 
+// Given a new socketID, inserts the new player into a lobby
 var addToLobby = function(socketID) {
   var openLobby = getNextLobby();
   var lobbyId = openLobby[0];
@@ -45,6 +48,7 @@ var addToLobby = function(socketID) {
   playerLobbies[socketID] = openLobby;
 };
 
+// Given a socketID from a disconnected player, removes the player from a lobby
 var removeFromLobby = function(socketID) {
   var playerLobby = playerLobbies[socketID];
   lobbies[playerLobby[0]].numPlayers --;
@@ -52,6 +56,7 @@ var removeFromLobby = function(socketID) {
   delete playerLobbies[socketID];
 };
 
+// Gets a player's lobby information given a player's socketID
 var getLobbyById = function(id) {
   return lobbies[playerLobbies[id][0]];
 };

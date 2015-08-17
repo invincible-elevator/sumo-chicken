@@ -13,19 +13,17 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 server.listen(port);
 
-var connectedSockets = [];
+var connectedSockets = []; // keeps track of the socket.io connections
 
 io.on('connection', function(socket) {
   console.log('Connected: ', socket.id);
   connectedSockets.push(socket.id);
   playerUtils.newPlayer(socket.id);
-  playerUtils.getPlayersByLobby(socket.id);
 
   socket.on('death', function(data) {
-    console.log('Death: ', socket.id, 'Killed by: ', data.killer);
+    // console.log('Death: ', socket.id, 'Killed by: ', data.killer);
     playerUtils.resetKills(socket.id);
     if (data.killer !== null) playerUtils.incrementKills(data.killer);
-
     socket.emit('newLocation', playerUtils.getStartLoc());
     playerUtils.newPlayer(socket.id);
   });
