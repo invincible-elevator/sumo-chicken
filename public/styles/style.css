@@ -1,3 +1,45 @@
 body {
   margin: 0;
+  font-family: 'Open Sans', sans-serif;
+}
+
+#aboutUs {
+  width: 100%;
+  text-align: center;
+}
+
+.header {
+  color: white;
+  font-size: 75px;
+  background-image: url(../assets/forest.png);
+  width: 100%;
+}
+
+a {
+  text-decoration: none; 
+}
+
+h1 {
+  margin-top: 0px;
+}
+
+.teamMembers {
+  width: 100%;
+}
+
+.teamMember {
+  display: inline-block;
+  vertical-align: top;
+  width: 20%;
+  margin: 10px;
+}
+
+.teamMember-photo {
+  height: 175px;
+  width: 175px;
+  border-radius: 50%;
+}
+
+.teamMember-quote {
+  text-align: justify;
 }
