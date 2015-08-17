@@ -2,24 +2,24 @@ var bpmText;
 
 var lastData = null;
 
-var create = function(){
+var platformLocations = [[0, -175, 'platform', 2],
+                         [800, -175, 'platform', 2], [-800, -175, 'platform', 2],
+                         [1100, -50, 'cloud', 1], [-1100, -50, 'cloud', 1],
+                         [-450, -25, 'platform', 2], [450, -25, 'platform', 2],
+                         [0, -75, 'cloud', 1],
+                         [0, 100, 'platform', 2],
+                         [800, 150, 'platform', 2], [-800, 150, 'platform', 2],
+                         [200, 200, 'cloud', 1], [-200, 200, 'cloud', 1],
+                         [0, 300, 'cloud', 1],
+                         [1100, 375, 'cloud', 1], [-1100, 375, 'cloud', 1],
+                         [800, 375, 'cloud', 1], [-800, 375, 'cloud', 1],
+                         [400, 350, 'platform', 2], [-400, 350, 'platform', 2]];
 
+var create = function(){
   socket = io.connect();
   socket.emit('username', {username: playerUsername});
 
   // platforms are [x, y, spriteKey, scale] and ordered by height
-  var platformLocations = [[0, -175, 'platform', 2],
-                           [800, -175, 'platform', 2], [-800, -175, 'platform', 2],
-                           [1100, -50, 'cloud', 1], [-1100, -50, 'cloud', 1],
-                           [-450, -25, 'platform', 2], [450, -25, 'platform', 2],
-                           [0, -75, 'cloud', 1],
-                           [0, 100, 'platform', 2],
-                           [800, 150, 'platform', 2], [-800, 150, 'platform', 2],
-                           [200, 200, 'cloud', 1], [-200, 200, 'cloud', 1],
-                           [0, 300, 'cloud', 1],
-                           [1100, 375, 'cloud', 1], [-1100, 375, 'cloud', 1],
-                           [800, 375, 'cloud', 1], [-800, 375, 'cloud', 1],
-                           [400, 350, 'platform', 2], [-400, 350, 'platform', 2]];
 
   game.world.setBounds(-2000, -2000, 4000, 4000 );
   game.time.desiredFps = 45;
@@ -29,22 +29,12 @@ var create = function(){
   
   game.physics.startSystem(Phaser.Physics.ARCADE);
 
-  // draw a red colored rectangle to go below lava
-  var graphics = game.add.graphics(0, 0);
-  graphics.beginFill(0xDD2200, 1);
-  graphics.drawRect(-2000,0, 4000, 4000);
-  graphics.endFill();
+  // Adds the forest and lava background
+  drawEnvironment();
 
   //  Phaser will automatically pause if the browser tab the game is in loses focus. Disabled this below.
   //  NOTE: Uncomment the following line for testing if you want to have two games playing in two browsers.
   // this.stage.disableVisibilityChange = true;
-
-  background = game.add.tileSprite(-2000, -400, 4000, 400, "background");
-  background.scale.x = 2;
-  background.scale.y = 2;
-
-  lava = game.add.tileSprite(-2000, 365,4000,180,"lava");
-  lava.scale.x = 1;
 
   // Create instructions
   var margin = 10;
@@ -165,5 +155,22 @@ var addNewChicken = function(socketId, data) {
   otherChickens[socketId].score = data.kills;
   upgradeChicken(otherChickens[socketId], data.kills);
   lava.bringToTop();
+};
+
+var drawEnvironment = function() {
+  // draw a red colored rectangle to go below lava
+  var graphics = game.add.graphics(0, 0);
+  graphics.beginFill(0xDD2200, 1);
+  graphics.drawRect(-2000,0, 4000, 4000);
+  graphics.endFill();
+
+  // add the forest background
+  background = game.add.tileSprite(-2000, -400, 4000, 400, "background");
+  background.scale.x = 2;
+  background.scale.y = 2;
+
+  // add the lava at the bottom
+  lava = game.add.tileSprite(-2000, 365,4000,180,"lava");
+  lava.scale.x = 1;
 };
 
