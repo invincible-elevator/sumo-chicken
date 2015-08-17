@@ -149,6 +149,7 @@ var upgradeChicken = function(chicken, score) {
 
 var syncExistingChicken = function(chicken, data) {
   if (!data.paused) {
+    chicken.tint = 0xFFFFFF;
     chicken.body.moves = true;
     chicken.paused = false;
     chicken.x = data.positionX;
@@ -172,5 +173,6 @@ var addNewChicken = function(socketId, data) {
   otherChickens[socketId] = newChicken;
   otherChickens[socketId].score = data.kills;
   upgradeChicken(otherChickens[socketId], data.kills);
+  if (otherChickens[socketId].paused) otherChickens[socketId].tent = 0x707070;
   lava.bringToTop();
 };
