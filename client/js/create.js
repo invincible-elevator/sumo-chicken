@@ -173,6 +173,6 @@ var addNewChicken = function(socketId, data) {
   otherChickens[socketId] = newChicken;
   otherChickens[socketId].score = data.kills;
   upgradeChicken(otherChickens[socketId], data.kills);
-  if (otherChickens[socketId].paused) otherChickens[socketId].tent = 0x707070;
+  if (data.paused) otherChickens[socketId].tint = 0x707070;
   lava.bringToTop();
 };
