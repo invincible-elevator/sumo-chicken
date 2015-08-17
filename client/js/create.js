@@ -1,6 +1,5 @@
 var bpmText;
 
-var lastTime = new Date().getTime();
 var lastData = null;
 
 var create = function(){
@@ -80,10 +79,6 @@ var create = function(){
   // Syncs player to the server
   socket.on('sync', function(data){
     lastData = data;
-
-    var time = new Date().getTime();
-    console.log(time - lastTime);
-    lastTime = time;
   });
 
   // Create platforms

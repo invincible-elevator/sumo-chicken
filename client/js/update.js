@@ -1,7 +1,6 @@
 syncTimer = 0;
 var syncRate = 2;
 var stopping = null;
-var stoppingTime = -100;
 
 var update = function(){
 
@@ -14,7 +13,8 @@ var update = function(){
   }
 
   syncTimer++;
-  if (!game.paused && syncTimer % 2 === 0 && lastData) {
+  if (!game.paused && syncTimer % syncRate === 0 && lastData) {
+ 
     var syncKeys = Object.keys(lastData);
     syncKeys.forEach(function(chicken) {
       if (chicken !== socket.id) {
@@ -125,7 +125,6 @@ var collideChickens = function(otherChicken, thisChicken) {
       stopping = right;
     }
     stopping.body.velocity.x = 0;
-    stoppingTime = syncTimer;
   }
 };
 
