@@ -24,7 +24,7 @@ var getPlayers = function() {
 
 var getPlayersByLobby = function(socketID) {
   var lobby = serverUtils.getLobbyById(socketID);
-  var players = {time: new Date().getTime()};
+  var players = {};
   for (var key in lobby) {
     if (key !== 'numPlayers' && lobby[key] !== '') {
       var playerID = lobby[key];
