@@ -20,7 +20,8 @@
     "socket.io": "^1.3.6"
   },
   "scripts": { 
-    "postinstall": "bower install; grunt start"
+    "start": "node server/server.js",
+    "postinstall": "bower install; ./node_modules/.bin/grunt build"
   },
   "repository": {
     "type": "git",
