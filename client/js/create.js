@@ -37,7 +37,7 @@ var create = function(){
 
   //  Phaser will automatically pause if the browser tab the game is in loses focus. Disabled this below.
   //  NOTE: Uncomment the following line for testing if you want to have two games playing in two browsers.
-  this.stage.disableVisibilityChange = true;
+  // this.stage.disableVisibilityChange = true;
 
   background = game.add.tileSprite(-2000, -400, 4000, 400, "background");
   background.scale.x = 2;
@@ -164,7 +164,6 @@ var addNewChicken = function(socketId, data) {
   otherChickens[socketId] = newChicken;
   otherChickens[socketId].score = data.kills;
   upgradeChicken(otherChickens[socketId], data.kills);
-  addUsernameToChicken(otherChickens[socketId], data.username);
   lava.bringToTop();
 };
 

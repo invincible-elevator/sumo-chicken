@@ -66,6 +66,7 @@ Player = function(game, x, y, socketId) {
     if (this.body.velocity.x > -maxSpeed) {
       this.body.velocity.x -= (this.body.touching.down ? groundAcceleration : airAcceleration);
       this.scale.x = 2;
+      this.children[0].scale.x = 1;
     }
   };
 
@@ -73,6 +74,7 @@ Player = function(game, x, y, socketId) {
     if (this.body.velocity.x < maxSpeed) {
       this.body.velocity.x += (this.body.touching.down ? groundAcceleration : airAcceleration);
       this.scale.x = -2;
+      this.children[0].scale.x = -1;
     }
   };
 
@@ -131,7 +133,6 @@ Player = function(game, x, y, socketId) {
 
   // level is an integer that starts at 0
   this.setLevel = function(level) {
-
     var bonus = (level * 0.25 + 1);
 
     maxSpeed = 300 * bonus;
@@ -145,7 +146,8 @@ Player = function(game, x, y, socketId) {
   this.addUsernameLabel = function(username) {
     if (!this.hasNameLabel) {
       var color = !this.socketId ? '0xff0000' : '0xffffff';
-      label = game.add.bitmapText(-12, -25, 'carrier_command', username, 8);
+      label = game.add.bitmapText(this.body.top, -20, 'carrier_command', username, 8);
+      label.anchor.setTo(0.5, 0.5);
       label.tint = color;
       this.addChild(label);
       this.hasNameLabel = true;
