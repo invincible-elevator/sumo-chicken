@@ -39,7 +39,10 @@ var getStartLoc = function() {
 };
 
 var newPlayer = function(socketID) {
+  var oldUsername;
+  if (playerInformation[socketID]) oldUsername = playerInformation[socketID].username;
   playerInformation[socketID] = Player();
+  if (oldUsername) playerInformation[socketID].username = oldUsername;
   serverUtils.addToLobby(socketID);
 };
 

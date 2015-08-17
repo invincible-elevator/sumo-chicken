@@ -22,7 +22,6 @@ io.on('connection', function(socket) {
 
   socket.on('username', function(data) {
     playerUtils.setUsername(socket.id, data.username);
-    console.log(playerUtils.getPlayers());
   });
 
   socket.on('death', function(data) {

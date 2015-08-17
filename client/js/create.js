@@ -162,6 +162,7 @@ var upgradeChicken = function(chicken, score) {
 };
 
 var syncExistingChicken = function(chicken, data) {
+  if (data.username !== '') addUsernameToChicken(chicken, data.username);
   if (!data.paused) {
     chicken.tint = 0xFFFFFF;
     chicken.body.moves = true;
@@ -187,16 +188,15 @@ var addNewChicken = function(socketId, data) {
   otherChickens[socketId] = newChicken;
   otherChickens[socketId].score = data.kills;
   upgradeChicken(otherChickens[socketId], data.kills);
-<<<<<<< HEAD
   if (data.paused) otherChickens[socketId].tint = 0x707070;
-=======
-  addUsernameToChicken(otherChickens[socketId], data.username);
->>>>>>> Put usernames above over chicken sprites
   lava.bringToTop();
 };
 
 var addUsernameToChicken = function(chicken, username) {
-  var style = { font: "14px Arial", fill: "#ffffff" };  
-  label = game.add.bitmapText(-12, -25, 'carrier_command', username, 8);
-  chicken.addChild(label);
+  if (!chicken.hasNameLabel) {
+    var style = { font: "14px Arial", fill: "#ffffff" };  
+    label = game.add.bitmapText(-12, -25, 'carrier_command', username, 8);
+    chicken.addChild(label);
+    chicken.hasNameLabel = true;
+  }
 };
