@@ -20,8 +20,8 @@
     "socket.io": "^1.3.6"
   },
   "scripts": {
-    "start": "grunt start", 
-    "postinstall": "bower install"
+    "start": "bower install", 
+    "postinstall": "grunt start"
   },
   "repository": {
     "type": "git",
