@@ -1,5 +1,5 @@
 syncTimer = 0;
-var syncRate = 2;
+var syncRate = 1;
 var stopping = null;
 
 var update = function(){
@@ -9,6 +9,11 @@ var update = function(){
                                   - game.camera.height / 2 + 30, 
                                   'carrier_command', 
                                   'SCORE:'+player.score, 30);
+
+
+    score.fixedToCamera = true;
+    score.cameraOffset.setTo(game.camera.width / 2 - 115, 10);
+
     score.lifespan = 1;
   }
 

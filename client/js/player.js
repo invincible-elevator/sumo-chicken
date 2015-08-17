@@ -50,7 +50,12 @@ Player = function(game, x, y, socketId) {
                                         -200, 
                                         'carrier_command', 
                                         'YOU DIED', 50);
+
+        loser.fixedToCamera = true;
+        loser.cameraOffset.setTo(game.camera.width / 2 - 230, game.camera.height / 2);
+
         loser.lifespan = 2000;
+
 
       game.time.events.add(1000, function() {
         socket.emit('death', { 'killer' : currentChicken.lastCollidedWith });
