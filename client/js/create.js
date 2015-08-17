@@ -1,6 +1,7 @@
 var bpmText;
 
 var lastTime = new Date().getTime();
+var lastData = null;
 
 var create = function(){
 
@@ -37,7 +38,7 @@ var create = function(){
 
   //  Phaser will automatically pause if the browser tab the game is in loses focus. Disabled this below.
   //  NOTE: Uncomment the following line for testing if you want to have two games playing in two browsers.
-  // this.stage.disableVisibilityChange = true;
+  this.stage.disableVisibilityChange = true;
 
   background = game.add.tileSprite(-2000, -400, 4000, 400, "background");
   background.scale.x = 2;
@@ -78,40 +79,11 @@ var create = function(){
 
   // Syncs player to the server
   socket.on('sync', function(data){
-    if (!game.paused) {
-      var syncKeys = Object.keys(data);
-      syncKeys.forEach(function(key) {
-        if (key !== socket.id) {
-          if (otherChickens[key]) {
-            syncExistingChicken(otherChickens[key], data[key]);
-          } else {
-            addNewChicken(key, data[key]);
-          }
-        } else {
-          if (player.score !== data[key].kills) {
-            player.score = data[key].kills;
-            upgradeChicken(player, player.score);
-          }
-        }
-      });
-      for (var key in otherChickens) {
-        if (syncKeys.indexOf(key) === -1) {
-          otherChickens[key].body.moves = true;
-          delete otherChickens[key];
-        }
-      }
+    lastData = data;
 
-      socket.emit('sync', {'PX': player.x, 
-                           'PY': player.y,
-                           'VX': player.body.velocity.x, 
-                           'VY': player.body.velocity.y,
-                           'dashBool': dashButton.isDown
-                          });
-
-      var time = new Date().getTime();
-      console.log(time - lastTime);
-      lastTime = time;
-    }
+    var time = new Date().getTime();
+    console.log(time - lastTime);
+    lastTime = time;
   });
 
   // Create platforms
