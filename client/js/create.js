@@ -53,6 +53,9 @@ var create = function(){
                                 'carrier_command', 
                                 'Move: arrow keys\n\nJump: SPACEBAR\n\nDash: C', 17);
 
+  bmpText.fixedToCamera = true;
+  bmpText.cameraOffset.setTo(10, 10);
+
   game.time.events.add(6000, function() {
     game.add.tween(bmpText).to({y: -170}, 1500, Phaser.Easing.Linear.None, true);
     game.add.tween(bmpText).to({alpha: 0}, 1500, Phaser.Easing.Linear.None, true);
