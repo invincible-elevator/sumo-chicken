@@ -2,6 +2,8 @@ syncTimer = 0;
 var syncRate = 2;
 var stopping = null;
 
+var previousTime = 0;
+
 var update = function(){
 
   if (player) {
@@ -13,8 +15,14 @@ var update = function(){
   }
 
   syncTimer++;
+  // Game updates every 2 frames with last update data received
   if (!game.paused && syncTimer % syncRate === 0 && lastData) {
- 
+
+    if (previousTime > lastData.time) {
+      console.log("oh boy");
+    }
+    previousTime = lastData.time;
+
     var syncKeys = Object.keys(lastData);
     syncKeys.forEach(function(chicken) {
       if (chicken !== socket.id) {
