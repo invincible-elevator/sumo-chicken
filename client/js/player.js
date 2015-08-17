@@ -47,10 +47,10 @@ Player = function(game, x, y, socketId) {
       console.log('Woe is me!!!');
 
         var loser = game.add.bitmapText(-250,
-                                        0, 
+                                        -200, 
                                         'carrier_command', 
                                         'YOU DIED', 50);
-        loser.lifespan = 1500;
+        loser.lifespan = 2000;
 
       game.time.events.add(1000, function() {
         socket.emit('death', { 'killer' : currentChicken.lastCollidedWith });
