@@ -50,9 +50,8 @@ Player = function(game, x, y, socketId) {
                                         -200, 
                                         'carrier_command', 
                                         'YOU DIED', 50);
-
         loser.fixedToCamera = true;
-        loser.cameraOffset.setTo(game.camera.width / 2 - 230, game.camera.height / 2);
+        loser.cameraOffset.setTo(game.camera.width / 2 - 250, game.camera.height / 2);
 
         loser.lifespan = 2000;
 
