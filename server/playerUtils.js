@@ -7,6 +7,7 @@ var startingLocation = {x: 0,
 
 var Player = function() {
   return {
+    username: '',
     velocityX: 0,
     velocityY: 0,
     positionX: startingLocation.x,
@@ -42,6 +43,10 @@ var newPlayer = function(socketID) {
   serverUtils.addToLobby(socketID);
 };
 
+var setUsername = function(socketID, username) {
+  playerInformation[socketID].username = username;
+};
+
 var updatePlayer = function(socketID, data) {
   playerInformation[socketID].positionX = data.PX;
   playerInformation[socketID].positionY = data.PY;
@@ -68,13 +73,14 @@ var pausePlayer = function(socketID, pausedOrResumed) {
 };
 
 module.exports = {
-  newPlayer: newPlayer,
+  newPlayer : newPlayer,
+  setUsername : setUsername,
   updatePlayer: updatePlayer,
-  dcPlayer: dcPlayer,
-  getPlayers: getPlayers,
+  dcPlayer : dcPlayer,
+  getPlayers : getPlayers,
   getPlayersByLobby : getPlayersByLobby,
-  getStartLoc: getStartLoc,
-  incrementKills: incrementKills,
-  resetKills: resetKills,
+  getStartLoc : getStartLoc,
+  incrementKills : incrementKills,
+  resetKills : resetKills,
   pausePlayer: pausePlayer
 };

@@ -20,6 +20,11 @@ io.on('connection', function(socket) {
   connectedSockets.push(socket.id);
   playerUtils.newPlayer(socket.id);
 
+  socket.on('username', function(data) {
+    playerUtils.setUsername(socket.id, data.username);
+    console.log(playerUtils.getPlayers());
+  });
+
   socket.on('death', function(data) {
     // console.log('Death: ', socket.id, 'Killed by: ', data.killer);
     playerUtils.resetKills(socket.id);

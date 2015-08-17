@@ -3,6 +3,31 @@ body {
   font-family: 'Open Sans', sans-serif;
 }
 
+#main {
+  width: 100%;
+  text-align: center;
+}
+
+.login {
+  font-size: 1.3em;
+}
+
+input[type=text] {
+  font-size: 1.4em;
+  text-align: center;
+  margin: 10px;
+}
+
+input[type=submit] {
+  padding: 20px 80px;
+  color: white;
+  font-size: 1.3em;
+  background: #519AA0;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
 #aboutUs {
   width: 100%;
   text-align: center;
