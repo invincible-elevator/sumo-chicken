@@ -1,5 +1,7 @@
 var bpmText;
 
+var lastTime = new Date().getTime();
+
 var create = function(){
 
   socket = io.connect();
@@ -105,6 +107,10 @@ var create = function(){
                            'VY': player.body.velocity.y,
                            'dashBool': dashButton.isDown
                           });
+
+      var time = new Date().getTime();
+      console.log(time - lastTime);
+      lastTime = time;
     }
   });
 
