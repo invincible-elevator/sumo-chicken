@@ -5,12 +5,17 @@ var create = function(){
   socket = io.connect();
 
   // platforms are [x, y, spriteKey, scale] and ordered by height
-  var platformLocations = [[0, -200, 'platform', 2],
+  var platformLocations = [[0, -175, 'platform', 2],
+                           [800, -175, 'platform', 2], [-800, -175, 'platform', 2],
+                           [1100, -50, 'cloud', 1], [-1100, -50, 'cloud', 1],
                            [-450, -25, 'platform', 2], [450, -25, 'platform', 2],
                            [0, -75, 'cloud', 1],
                            [0, 100, 'platform', 2],
+                           [800, 150, 'platform', 2], [-800, 150, 'platform', 2],
                            [200, 200, 'cloud', 1], [-200, 200, 'cloud', 1],
                            [0, 300, 'cloud', 1],
+                           [1100, 375, 'cloud', 1], [-1100, 375, 'cloud', 1],
+                           [800, 375, 'cloud', 1], [-800, 375, 'cloud', 1],
                            [400, 350, 'platform', 2], [-400, 350, 'platform', 2]];
 
   game.world.setBounds(-2000, -2000, 4000, 4000 );
@@ -62,6 +67,7 @@ var create = function(){
   socket.on('newLocation', function(data){
     player = new Player(game, data.x, data.y, false);
     game.add.existing(player);
+    setCamera();
     lava.bringToTop();
   });
 
@@ -120,13 +126,18 @@ var create = function(){
     player.dash();
   }, this);
 
-  var cameraMargin = 250;
-  game.camera.follow(player);
-  game.camera.deadzone = new Phaser.Rectangle(cameraMargin, 
-                                              cameraMargin, 
-                                              game.camera.width - cameraMargin * 2, 
-                                              game.camera.height - cameraMargin * 2);
-  game.camera.focusOnXY(0, 0);
+  var setCamera = function(){
+    var cameraMargin = 250;
+    game.camera.follow(player);
+    game.camera.deadzone = new Phaser.Rectangle(cameraMargin, 
+                                                cameraMargin, 
+                                                game.camera.width - cameraMargin * 2, 
+                                                game.camera.height - cameraMargin * 2);
+    game.camera.focusOnXY(0, 0);    
+  };
+
+  setCamera();
+
 
   cursors = game.input.keyboard.createCursorKeys();
 
