@@ -57,4 +57,4 @@ setInterval(function() {
   connectedSockets.forEach(function(socketID) {
     io.sockets.connected[socketID].emit('sync', playerUtils.getPlayersByLobby(socketID));
   });
-}, 30);
+}, 100);
