@@ -60,11 +60,8 @@ var create = function(){
   // Create the initial player
   player = new Player(game, 0, 0, false);
   game.add.existing(player);
+  addUsernameToChicken(player, playerUsername);
   lava.bringToTop(); // player falls behind lava
-
-  var style = { font: "14px Arial", fill: "#ffffff" };  
-  label = game.add.bitmapText(-12, -25, 'carrier_command', playerUsername, 8);
-  player.addChild(label);
 
   otherChickens = {};
 
@@ -73,6 +70,7 @@ var create = function(){
     player = new Player(game, data.x, data.y, false);
     game.add.existing(player);
     setCamera();
+    addUsernameToChicken(player, playerUsername);
     lava.bringToTop();
   });
 
@@ -189,6 +187,16 @@ var addNewChicken = function(socketId, data) {
   otherChickens[socketId] = newChicken;
   otherChickens[socketId].score = data.kills;
   upgradeChicken(otherChickens[socketId], data.kills);
+<<<<<<< HEAD
   if (data.paused) otherChickens[socketId].tint = 0x707070;
+=======
+  addUsernameToChicken(otherChickens[socketId], data.username);
+>>>>>>> Put usernames above over chicken sprites
   lava.bringToTop();
+};
+
+var addUsernameToChicken = function(chicken, username) {
+  var style = { font: "14px Arial", fill: "#ffffff" };  
+  label = game.add.bitmapText(-12, -25, 'carrier_command', username, 8);
+  chicken.addChild(label);
 };
