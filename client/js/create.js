@@ -3,6 +3,7 @@ var bpmText;
 var create = function(){
 
   socket = io.connect();
+  socket.emit('username', {username: playerUsername});
 
   // platforms are [x, y, spriteKey, scale] and ordered by height
   var platformLocations = [[0, -175, 'platform', 2],
