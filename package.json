@@ -7,6 +7,7 @@
     "bower": "1.4.x",
     "express": "^4.13.3",
     "grunt": "^0.4.5",
+    "grunt-cli": "^0.1.13",
     "grunt-concurrent": "^2.0.1",
     "grunt-contrib-jshint": "^0.11.2",
     "grunt-contrib-uglify": "^0.9.1",
@@ -21,7 +22,7 @@
   },
   "scripts": {
     "start": "node server/server.js",
-    "postinstall": "bower install"
+    "postinstall": "bower install; ./node_modules/grunt-cli/bin/grunt build"
   },
   "repository": {
     "type": "git",
