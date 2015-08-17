@@ -138,6 +138,16 @@ Player = function(game, x, y, socketId) {
     jumpSpeed = -700 * Math.sqrt(bonus);
   };
 
+  this.addUsernameLabel = function(username) {
+    if (!this.hasNameLabel) {
+      var color = !this.socketId ? '0xff0000' : '0xffffff';
+      label = game.add.bitmapText(-12, -25, 'carrier_command', username, 8);
+      label.tint = color;
+      this.addChild(label);
+      this.hasNameLabel = true;
+    }
+  };
+
 };
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);

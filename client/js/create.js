@@ -62,7 +62,7 @@ var create = function(){
   // Create the initial player
   player = new Player(game, 0, 0, false);
   game.add.existing(player);
-  addUsernameToChicken(player, playerUsername);
+  player.addUsernameLabel(playerUsername);
   lava.bringToTop(); // player falls behind lava
 
   otherChickens = {};
@@ -72,7 +72,7 @@ var create = function(){
     player = new Player(game, data.x, data.y, false);
     game.add.existing(player);
     setCamera();
-    addUsernameToChicken(player, playerUsername);
+    player.addUsernameLabel(playerUsername);
     lava.bringToTop();
   });
 
@@ -135,7 +135,7 @@ var upgradeChicken = function(chicken, score) {
 };
 
 var syncExistingChicken = function(chicken, data) {
-  if (data.username !== '') addUsernameToChicken(chicken, data.username);
+  if (data.username !== '') chicken.addUsernameLabel(data.username);
   if (!data.paused) {
     chicken.tint = 0xFFFFFF;
     chicken.body.moves = true;
@@ -165,11 +165,3 @@ var addNewChicken = function(socketId, data) {
   lava.bringToTop();
 };
 
-var addUsernameToChicken = function(chicken, username) {
-  if (!chicken.hasNameLabel) {
-    var style = { font: "14px Arial", fill: "#ffffff" };  
-    label = game.add.bitmapText(-12, -25, 'carrier_command', username, 8);
-    chicken.addChild(label);
-    chicken.hasNameLabel = true;
-  }
-};
