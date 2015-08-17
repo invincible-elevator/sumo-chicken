@@ -1,7 +1,8 @@
 var express     = require('express'),
     http        = require('http'),
     path        = require('path'),
-    playerUtils = require('./playerUtils.js');
+    playerUtils = require('./playerUtils.js'),
+    serverUtils = require('./serverUtils.js');
 
 var app = express();
 var server = http.Server(app);
@@ -12,15 +13,17 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 server.listen(port);
 
+var connectedSockets = []; // keeps track of the socket.io connections
+
 io.on('connection', function(socket) {
   console.log('Connected: ', socket.id);
+  connectedSockets.push(socket.id);
   playerUtils.newPlayer(socket.id);
 
   socket.on('death', function(data) {
-    console.log('Death: ', socket.id, 'Killed by: ', data.killer);
+    // console.log('Death: ', socket.id, 'Killed by: ', data.killer);
     playerUtils.resetKills(socket.id);
     if (data.killer !== null) playerUtils.incrementKills(data.killer);
-
     socket.emit('newLocation', playerUtils.getStartLoc());
     playerUtils.newPlayer(socket.id);
   });
@@ -39,11 +42,15 @@ io.on('connection', function(socket) {
 
   socket.on('disconnect', function() {
     console.log('Disconnected: ', socket.id);
+    connectedSockets.splice(connectedSockets.indexOf(socket.id), 1);
     playerUtils.dcPlayer(socket.id);
   });
 });
 
 // Tell the player to sync with ther server every 50ms (approx 2 frames)
 setInterval(function() {
-  io.sockets.emit('sync', playerUtils.getPlayers());
+  // io.sockets.emit('sync', playerUtils.getPlayers());
+  connectedSockets.forEach(function(socketID) {
+    io.sockets.connected[socketID].emit('sync', playerUtils.getPlayersByLobby(socketID));
+  });
 }, 50);

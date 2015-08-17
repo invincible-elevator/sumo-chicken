@@ -1,3 +1,5 @@
+var serverUtils = require('./serverUtils.js');
+
 var playerInformation = {};
 
 var startingLocation = {x: 0,
@@ -15,8 +17,20 @@ var Player = function() {
   };
 };
 
-var getPlayers = function(socketID) {
+var getPlayers = function() {
   return playerInformation;
+};
+
+var getPlayersByLobby = function(socketID) {
+  var lobby = serverUtils.getLobbyById(socketID);
+  var players = {};
+  for (var key in lobby) {
+    if (key !== 'numPlayers' && lobby[key] !== '') {
+      var playerID = lobby[key];
+      players[playerID] = playerInformation[playerID];
+    }
+  }
+  return players;
 };
 
 var getStartLoc = function() {
@@ -25,6 +39,7 @@ var getStartLoc = function() {
 
 var newPlayer = function(socketID) {
   playerInformation[socketID] = Player();
+  serverUtils.addToLobby(socketID);
 };
 
 var updatePlayer = function(socketID, data) {
@@ -37,6 +52,7 @@ var updatePlayer = function(socketID, data) {
 
 var dcPlayer = function(socketID) {
   delete playerInformation[socketID];
+  serverUtils.removeFromLobby(socketID);
 };
 
 var incrementKills = function(socketID) {
@@ -56,6 +72,7 @@ module.exports = {
   updatePlayer: updatePlayer,
   dcPlayer: dcPlayer,
   getPlayers: getPlayers,
+  getPlayersByLobby : getPlayersByLobby,
   getStartLoc: getStartLoc,
   incrementKills: incrementKills,
   resetKills: resetKills,
