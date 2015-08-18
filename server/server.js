@@ -24,6 +24,10 @@ io.on('connection', function(socket) {
     playerUtils.setUsername(socket.id, data.username);
   });
 
+  socket.on('sync', function(data) {
+    playerUtils.updatePlayer(socket.id, data);
+  });
+  
   socket.on('death', function(data) {
     // console.log('Death: ', socket.id, 'Killed by: ', data.killer);
     playerUtils.resetKills(socket.id);
@@ -32,18 +36,14 @@ io.on('connection', function(socket) {
     playerUtils.newPlayer(socket.id);
   });
 
-  socket.on('sync', function(data) {
-    playerUtils.updatePlayer(socket.id, data);
-  });
-
+  // Pause and unpause players
   socket.on('pause', function() {
     playerUtils.pausePlayer(socket.id,true);
   });
-
   socket.on('resume', function() {
     playerUtils.pausePlayer(socket.id,false);
   });
-
+  
   socket.on('disconnect', function() {
     console.log('Disconnected: ', socket.id);
     connectedSockets.splice(connectedSockets.indexOf(socket.id), 1);
@@ -52,8 +52,8 @@ io.on('connection', function(socket) {
 });
 
 // Tell the player to sync with ther server every 50ms (approx 2 frames)
+// SENT: a hash with player information at corresponding socketIDs
 setInterval(function() {
-  // io.sockets.emit('sync', playerUtils.getPlayers());
   connectedSockets.forEach(function(socketID) {
     io.sockets.connected[socketID].emit('sync', playerUtils.getPlayersByLobby(socketID));
   });
