@@ -138,6 +138,7 @@ var addAnimations = function(chicken) {
   var mathSign = chicken.body.velocity.x === 0 ? 0 : chicken.body.velocity.x > 0 ? 1 : -1;
   if (mathSign !== 0) {
     chicken.scale.x = mathSign > 0 ? -Math.abs(chicken.scale.x) : Math.abs(chicken.scale.x);
+    chicken.children[0].scale.x = mathSign > 0 ? -1 : 1;
   } 
   if (chicken.body.velocity.y !== 0) {
     chicken.animations.stop();
