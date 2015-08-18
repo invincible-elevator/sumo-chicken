@@ -2,7 +2,7 @@ var Lobby = require('./Lobby.js').Lobby;
 
 // All lobbies
 var lobbies = []; 
-var maxLobbySize = 6;
+var maxLobbySize = 100;
 
 // Hash takes socketID and gives lobbyID
 var playerLobbies = {}; // to improve lookup when finding lobby that a player is in
