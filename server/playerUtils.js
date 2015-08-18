@@ -24,12 +24,13 @@ var getPlayers = function() {
 
 var getPlayersByLobby = function(socketID) {
   var lobby = serverUtils.getLobbyById(socketID);
+  var playerIDs = lobby.getPlayerIDs();
+  
   var players = {};
-  for (var key in lobby) {
-    if (key !== 'numPlayers' && lobby[key] !== '') {
-      var playerID = lobby[key];
-      players[playerID] = playerInformation[playerID];
-    }
+  var id;
+  for (var i = 0; i < playerIDs.length; i++) {
+    id = playerIDs[i];
+    players[id] = playerInformation[id];
   }
   return players;
 };

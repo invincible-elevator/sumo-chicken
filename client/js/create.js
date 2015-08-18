@@ -1,5 +1,3 @@
-var bpmText;
-
 var lastData = null;
   
 // platforms are [x, y, spriteKey, scale] and ordered by height
@@ -107,7 +105,7 @@ var syncExistingChicken = function(chicken, data) {
     chicken.body.velocity.y = data.velocityY;
     if (chicken.score !== data.kills) {
       chicken.score = data.kills;
-      upgradeChicken(chicken, data.kills);
+      chicken.setLevel(data.kills);
     }
   } else {
     chicken.tint = 0x707070;
