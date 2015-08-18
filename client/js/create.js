@@ -1,25 +1,28 @@
 var bpmText;
 
 var lastData = null;
+  
+// platforms are [x, y, spriteKey, scale] and ordered by height
+var platformLocations = [[0, -175, 'platform', 2],
+                         [800, -175, 'platform', 2], [-800, -175, 'platform', 2],
+                         [1100, -50, 'cloud', 1], [-1100, -50, 'cloud', 1],
+                         [-450, -25, 'platform', 2], [450, -25, 'platform', 2],
+                         [0, -75, 'cloud', 1],
+                         [0, 100, 'platform', 2],
+                         [800, 150, 'platform', 2], [-800, 150, 'platform', 2],
+                         [200, 200, 'cloud', 1], [-200, 200, 'cloud', 1],
+                         [0, 300, 'cloud', 1],
+                         [1100, 375, 'cloud', 1], [-1100, 375, 'cloud', 1],
+                         [800, 375, 'cloud', 1], [-800, 375, 'cloud', 1],
+                         [400, 350, 'platform', 2], [-400, 350, 'platform', 2]];
 
 var create = function(){
-
   socket = io.connect();
   socket.emit('username', {username: playerUsername});
-
-  // platforms are [x, y, spriteKey, scale] and ordered by height
-  var platformLocations = [[0, -175, 'platform', 2],
-                           [800, -175, 'platform', 2], [-800, -175, 'platform', 2],
-                           [1100, -50, 'cloud', 1], [-1100, -50, 'cloud', 1],
-                           [-450, -25, 'platform', 2], [450, -25, 'platform', 2],
-                           [0, -75, 'cloud', 1],
-                           [0, 100, 'platform', 2],
-                           [800, 150, 'platform', 2], [-800, 150, 'platform', 2],
-                           [200, 200, 'cloud', 1], [-200, 200, 'cloud', 1],
-                           [0, 300, 'cloud', 1],
-                           [1100, 375, 'cloud', 1], [-1100, 375, 'cloud', 1],
-                           [800, 375, 'cloud', 1], [-800, 375, 'cloud', 1],
-                           [400, 350, 'platform', 2], [-400, 350, 'platform', 2]];
+  
+  //  Phaser will automatically pause if the browser tab the game is in loses focus. Disabled this below.
+  //  NOTE: Uncomment the following line for testing if you want to have two games playing in two browsers.
+  // this.stage.disableVisibilityChange = true;
 
   game.world.setBounds(-2000, -2000, 4000, 4000 );
   game.time.desiredFps = 45;
@@ -29,38 +32,11 @@ var create = function(){
   
   game.physics.startSystem(Phaser.Physics.ARCADE);
 
-  // draw a red colored rectangle to go below lava
-  var graphics = game.add.graphics(0, 0);
-  graphics.beginFill(0xDD2200, 1);
-  graphics.drawRect(-2000,0, 4000, 4000);
-  graphics.endFill();
-
-  //  Phaser will automatically pause if the browser tab the game is in loses focus. Disabled this below.
-  //  NOTE: Uncomment the following line for testing if you want to have two games playing in two browsers.
-  this.stage.disableVisibilityChange = true;
-
-  background = game.add.tileSprite(-2000, -400, 4000, 400, "background");
-  background.scale.x = 2;
-  background.scale.y = 2;
-
-  lava = game.add.tileSprite(-2000, 365,4000,180,"lava");
-  lava.scale.x = 1;
+  // Adds the forest and lava background
+  drawEnvironment();
 
   // Create instructions
-  var margin = 10;
-  bmpText = game.add.bitmapText(-game.camera.width / 2 + margin,
-                                -game.camera.height / 2 + margin, 
-                                'carrier_command', 
-                                'Move: arrow keys\n\nJump: SPACEBAR\n\nDash: C', 17);
-
-  bmpText.fixedToCamera = true;
-  bmpText.cameraOffset.setTo(10, 10);
-
-  game.time.events.add(6000, function() {
-    game.add.tween(bmpText).to({y: -170}, 1500, Phaser.Easing.Linear.None, true);
-    game.add.tween(bmpText).to({alpha: 0}, 1500, Phaser.Easing.Linear.None, true);
-  }, this);
-
+  viewInstructions();
 
   // Create the initial player
   player = new Player(game, 0, 0, false);
@@ -68,6 +44,7 @@ var create = function(){
   player.addUsernameLabel(playerUsername);
   lava.bringToTop(); // player falls behind lava
 
+  // Instantiate object to hold other chickens
   otherChickens = {};
 
   // Respawns the player 
@@ -85,16 +62,7 @@ var create = function(){
   });
 
   // Create platforms
-  platforms = game.add.group();
-  platforms.enableBody = true;
-  
-  platformLocations.forEach(function(platformCoords){
-    var platform = platforms.create(platformCoords[0], platformCoords[1], platformCoords[2]);
-    platform.scale.x = platformCoords[3];
-    platform.scale.y = platformCoords[3];
-    platform.anchor.setTo(0.5, 0.5);
-    platform.body.immovable = true;
-  });
+  createPlatforms();
 
   // Create button inputs
   jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -105,18 +73,8 @@ var create = function(){
     player.dash();
   }, this);
 
-  var setCamera = function(){
-    var cameraMargin = 250;
-    game.camera.follow(player);
-    game.camera.deadzone = new Phaser.Rectangle(cameraMargin, 
-                                                cameraMargin, 
-                                                game.camera.width - cameraMargin * 2, 
-                                                game.camera.height - cameraMargin * 2);
-    game.camera.focusOnXY(0, 0);    
-  };
-
+  // Set the Camera to follow the player
   setCamera();
-
 
   cursors = game.input.keyboard.createCursorKeys();
 
@@ -164,7 +122,61 @@ var addNewChicken = function(socketId, data) {
   otherChickens[socketId] = newChicken;
   otherChickens[socketId].score = data.kills;
   upgradeChicken(otherChickens[socketId], data.kills);
-  addUsernameToChicken(otherChickens[socketId], data.username);
   lava.bringToTop();
 };
 
+var drawEnvironment = function() {
+  // draw a red colored rectangle to go below lava
+  var graphics = game.add.graphics(0, 0);
+  graphics.beginFill(0xDD2200, 1);
+  graphics.drawRect(-2000,0, 4000, 4000);
+  graphics.endFill();
+
+  // add the forest background
+  background = game.add.tileSprite(-2000, -400, 4000, 400, "background");
+  background.scale.x = 2;
+  background.scale.y = 2;
+
+  // add the lava at the bottom
+  lava = game.add.tileSprite(-2000, 365,4000,180,"lava");
+  lava.scale.x = 1;
+};
+
+var viewInstructions = function() {
+  var margin = 10;
+  bmpText = game.add.bitmapText(-game.camera.width / 2 + margin,
+                                -game.camera.height / 2 + margin, 
+                                'carrier_command', 
+                                'Move: arrow keys\n\nJump: SPACEBAR\n\nDash: C', 17);
+
+  bmpText.fixedToCamera = true;
+  bmpText.cameraOffset.setTo(10, 10);
+
+  game.time.events.add(6000, function() {
+    game.add.tween(bmpText).to({y: -170}, 1500, Phaser.Easing.Linear.None, true);
+    game.add.tween(bmpText).to({alpha: 0}, 1500, Phaser.Easing.Linear.None, true);
+  }, this);
+};
+
+var createPlatforms = function() {
+  platforms = game.add.group();
+  platforms.enableBody = true;
+  
+  platformLocations.forEach(function(platformCoords){
+    var platform = platforms.create(platformCoords[0], platformCoords[1], platformCoords[2]);
+    platform.scale.x = platformCoords[3];
+    platform.scale.y = platformCoords[3];
+    platform.anchor.setTo(0.5, 0.5);
+    platform.body.immovable = true;
+  });
+};
+
+var setCamera = function(){
+  var cameraMargin = 250;
+  game.camera.follow(player);
+  game.camera.deadzone = new Phaser.Rectangle(cameraMargin, 
+                                              cameraMargin, 
+                                              game.camera.width - cameraMargin * 2, 
+                                              game.camera.height - cameraMargin * 2);
+  game.camera.focusOnXY(0, 0);    
+};
