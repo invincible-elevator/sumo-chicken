@@ -66,7 +66,7 @@ Player = function(game, x, y, socketId) {
     if (this.body.velocity.x > -maxSpeed) {
       this.body.velocity.x -= (this.body.touching.down ? groundAcceleration : airAcceleration);
       this.scale.x = 2;
-      this.children[0].scale.x = 1;
+      if (this.children.length >0) this.children[0].scale.x = 1;
     }
   };
 
@@ -74,7 +74,7 @@ Player = function(game, x, y, socketId) {
     if (this.body.velocity.x < maxSpeed) {
       this.body.velocity.x += (this.body.touching.down ? groundAcceleration : airAcceleration);
       this.scale.x = -2;
-      this.children[0].scale.x = -1;
+      if (this.children.length >0) this.children[0].scale.x = -1;
     }
   };
 
